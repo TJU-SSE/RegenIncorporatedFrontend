@@ -12,20 +12,9 @@
           <li @click="handleHeadChange('home')" :class="curPathName==='home'?'active':''">
             <span>{{$t("header.home")}}</span>
           </li>
-          <li :class="curPathName==='fashionShow'?'active':''"
-              @mouseenter="onFashionShowMouseOver"
-              @mouseleave="onFashionShowMouseOut"
-              @click="onFashionShowMouseOver"
-              target-data="fashionShowTarget"
-              id="fashionShowLi">
-            <span>{{$t("header.fashion_show")}}</span>
-          </li>
+
           <li :class="curPathName==='photography'?'active':''"
-              @mouseenter="onPhotographyMouseOver"
-              @mouseleave="onPhotographyMouseOut"
-              @click="onPhotographyMouseOver"
-              target-data="photographyTarget"
-              id="photographyLi">
+              @click="handleHeadChange('photography')">
             <span>{{$t("header.photography")}}</span>
           </li>
           <li v-for="headItem in headItems"
@@ -35,7 +24,14 @@
               :class="curPathName===headItem.name?'active':''">
             <span>{{headItem.title}}</span>
           </li>
-
+          <li :class="curPathName==='fashionShow'?'active':''"
+              @mouseenter="onFashionShowMouseOver"
+              @mouseleave="onFashionShowMouseOut"
+              @click="onFashionShowMouseOver"
+              target-data="fashionShowTarget"
+              id="fashionShowLi">
+            <span>{{$t("header.fashion_show")}}</span>
+          </li>
           <li class="add-btn" v-if="hasAddBtn" @click="onAddBtnClick">
             <a><i class="fa fa-plus fa-lg"></i></a>
           </li>
@@ -126,7 +122,7 @@
         </header>
       </transition>
 
-      <transition name="slide">
+      <!-- <transition name="slide">
         <header class="second-header regen-container"
                 :class="curPathName==='photography'?'active':''"
                 @mouseenter="onPhotographyMouseOver"
@@ -168,7 +164,7 @@
             </li>
           </ul>
         </header>
-      </transition>
+      </transition> -->
     </div>
 
     <div class="customer-search-container"  v-if="curPathName === 'home'">
@@ -200,8 +196,12 @@
         title: 'home',
         headItems: [
           {
-            name: 'talent',
-            title: 'TALENT'
+            name: 'show/event',
+            title: 'SHOW/EVENT'
+          },
+          {
+            name: 'video',
+            title: 'VIDEO'
           },
           {
             name: 'news',
@@ -210,6 +210,10 @@
           {
             name: 'contact',
             title: 'CONTACT'
+          },
+          {
+            name: 'talent',
+            title: 'TALENT'
           },
           {
             name: 'products',
@@ -267,22 +271,22 @@
           this.isShowingFashionShow = false
         }
       },
-      onPhotographyMouseOver: function () {
-        if (!this.isShowingPhotography) {
-          this.isShowingPhotography = true
-        }
-        this.isShowingFashionShow = false
-      },
-      onPhotographyMouseOut: function (event) {
-        let fromData = event.target.getAttribute('target-data')
-        let toData = event.relatedTarget.getAttribute('id')
+      // onPhotographyMouseOver: function () {
+      //   if (!this.isShowingPhotography) {
+      //     this.isShowingPhotography = true
+      //   }
+      //   this.isShowingFashionShow = false
+      // },
+      // onPhotographyMouseOut: function (event) {
+      //   let fromData = event.target.getAttribute('target-data')
+      //   let toData = event.relatedTarget.getAttribute('id')
 
-        let fromData2 = event.relatedTarget.getAttribute('target-data')
-        let toData2 = event.target.getAttribute('id')
-        if ((fromData !== toData && fromData2 !== toData2) || fromData === null || fromData2 === null) {
-          this.isShowingPhotography = false
-        }
-      },
+      //   let fromData2 = event.relatedTarget.getAttribute('target-data')
+      //   let toData2 = event.target.getAttribute('id')
+      //   if ((fromData !== toData && fromData2 !== toData2) || fromData === null || fromData2 === null) {
+      //     this.isShowingPhotography = false
+      //   }
+      // },
       onLogoutBtnClick () {
         this.logout()
         if (this.$route.meta && this.$route.meta.role) {
@@ -305,7 +309,7 @@
       },
       handleHeadChange (headItemName) {
         console.log(this.$i18n.locale)
-        this.isShowingPhotography = false
+        // this.isShowingPhotography = false
         this.isShowingFashionShow = false
         if (headItemName === 'talent') {
           this.$router.push({
