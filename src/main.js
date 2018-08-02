@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import AwesomeSwiper from 'vue-awesome-swiper'
-
+import VueVideoPlayer from 'vue-video-player'
 import CommonUtils from './config/CommonUtils'
 import i18n from './tools/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -13,12 +13,12 @@ require('../node_modules/bootstrap/dist/css/bootstrap.min.css')
 require('../node_modules/jquery/dist/jquery.min')
 require('../node_modules/font-awesome/css/font-awesome.min.css')
 import '../static/css/common.scss'
-
 Vue.config.productionTip = false
 
 Vue.use(VueResource)
 Vue.use(ElementUI)
 Vue.use(AwesomeSwiper)
+Vue.use(VueVideoPlayer)
 
 router.beforeEach((to, from, next) => {
   if (to.meta && to.meta.role) {
