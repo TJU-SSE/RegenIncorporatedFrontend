@@ -1,9 +1,18 @@
 <template>
   <div>
     <el-row>
-      <carousel :products="products"></carousel>
+      <div class="carousel">
+        <div >
+          <el-carousel autoplay="false" type="card" height="700px" arrow="always">
+            <el-carousel-item v-for="item in products">
+                <div class="cimg" style="height: 100%; width: 100%">
+                  <img class="img"  :src="item.img_url" @click="onItemClick(item.id)">
+                </div>
+            </el-carousel-item>
+          </el-carousel>  
+        </div>      
+      </div>
     </el-row>
-    
     <el-row>
 
     </el-row>
@@ -11,20 +20,15 @@
 </template>
 
 <script>
-  import toastr from 'toastr'
-  import ProductService from '@/service/ProductService'
-  import env from '@/config/env'
-  import carousel from '@/views/components/carousel'
 
   export default {
     data: function () {
       return {
-        products: []
+        // products: []
       }
     },
-    props: ['imgs'],
+    props: ['products'],
     components: {
-      carousel
     },
     methods: {
       onItemClick (productId) {
@@ -34,18 +38,7 @@
             showId: productId
           }
         })
-      },
-      async getItems () {
-        let respBody = await ProductService.getAll(this, 1)
-        if (respBody.code === env.RESP_CODE.SUCCESS) {
-          this.products = respBody.msg.products
-        } else {
-          toastr.error('加载数据失败！')
-        }
       }
-    },
-    mounted () {
-      this.getItems()
     },
     computed: {
     }

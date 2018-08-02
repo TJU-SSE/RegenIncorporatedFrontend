@@ -128,6 +128,8 @@
       }),
       async getItems () {
         let respBody = await IndexService.getAll(this)
+        console.log('respb')
+        console.log()
         if (respBody.code === env.RESP_CODE.SUCCESS) {
           this.backendData = respBody.msg
           this.backendData.forEach((data, index) => {

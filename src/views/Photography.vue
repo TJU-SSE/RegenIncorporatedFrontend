@@ -1,48 +1,61 @@
 <template>
   <div>
-    photography here
+    <el-row>
+      <div class="carousel">
+        <div >
+          <el-carousel :interval="4000" type="card" height="400px" arrow="always">
+            <el-carousel-item v-for="item in 6" :key="item">
+              <h3>{{ item }}</h3>
+            </el-carousel-item>
+          </el-carousel>  
+        </div>      
+      </div>
+    </el-row>
+    <el-row>
+
+    </el-row>
   </div>
 </template>
 
 <script>
-  import ImgGridItems from './components/ImgGridItems.vue'
-
   export default {
     data: function () {
       return {
-        title: 'photography',
-        imgGridItems: [],
-        secondMenu: this.$route.params.secondMenu
       }
     },
+    props: ['imgs'],
     components: {
-      ImgGridItems
     },
     methods: {
-      getImgGridItems: function (count) {
-        this.imgGridItems = []
-        for (let i = 1; i <= count; i++) {
-          this.imgGridItems.push({
-            imgUrl: '../../static/img/talent' + i + '.jpg',
-            title: 'Fabio Chizzola',
-            desc: 'Photography ' + this.$route.params.secondMenu,
-            designerId: 0
-          })
-        }
-      }
     },
     mounted () {
-      document.title = this.title
-      this.getImgGridItems(9)
     },
     computed: {
-      secondMenuCom: function () {
-        this.getImgGridItems(9)
-        return this.$route.params.secondMenu
-      }
     }
   }
 </script>
 
-<style>
+<style scoped lang="scss">
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+  
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+  .carousel{
+    width: 70%;
+    align-content: center;
+    align-items: center;
+    text-align:center;
+    margin:0 auto
+  }
 </style>
