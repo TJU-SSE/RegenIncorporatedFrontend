@@ -12,18 +12,11 @@
           <li @click="handleHeadChange('home')" :class="curPathName==='home'?'active':''">
             <span>{{$t("header.home")}}</span>
           </li>
-          <li :class="curPathName==='fashionShow'?'active':''"
-              @mouseenter="onFashionShowMouseOver"
-              @mouseleave="onFashionShowMouseOut"
-              @click="onFashionShowMouseOver"
-              target-data="fashionShowTarget"
-              id="fashionShowLi">
-            <span>{{$t("header.fashion_show")}}</span>
-          </li>
+
           <li :class="curPathName==='photography'?'active':''"
               @mouseenter="onPhotographyMouseOver"
               @mouseleave="onPhotographyMouseOut"
-              @click="onPhotographyMouseOver"
+              @click="handleHeadChange('photography')"
               target-data="photographyTarget"
               id="photographyLi">
             <span>{{$t("header.photography")}}</span>
@@ -35,7 +28,14 @@
               :class="curPathName===headItem.name?'active':''">
             <span>{{headItem.title}}</span>
           </li>
-
+          <li :class="curPathName==='fashionShow'?'active':''"
+              @mouseenter="onFashionShowMouseOver"
+              @mouseleave="onFashionShowMouseOut"
+              @click="onFashionShowMouseOver"
+              target-data="fashionShowTarget"
+              id="fashionShowLi">
+            <span>{{$t("header.fashion_show")}}</span>
+          </li>
           <li class="add-btn" v-if="hasAddBtn" @click="onAddBtnClick">
             <a><i class="fa fa-plus fa-lg"></i></a>
           </li>
@@ -200,8 +200,12 @@
         title: 'home',
         headItems: [
           {
-            name: 'talent',
-            title: 'TALENT'
+            name: 'show/event',
+            title: 'SHOW/EVENT'
+          },
+          {
+            name: 'video',
+            title: 'VIDEO'
           },
           {
             name: 'news',
@@ -210,6 +214,10 @@
           {
             name: 'contact',
             title: 'CONTACT'
+          },
+          {
+            name: 'talent',
+            title: 'TALENT'
           },
           {
             name: 'products',

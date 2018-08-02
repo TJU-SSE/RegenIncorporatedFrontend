@@ -1,7 +1,6 @@
 <template>
   <div>
-    <ImgGridItems :imgGridItems="imgGridItems"></ImgGridItems>
-    <p class="hidden">{{secondMenuCom}}</p>
+    photography here
   </div>
 </template>
 

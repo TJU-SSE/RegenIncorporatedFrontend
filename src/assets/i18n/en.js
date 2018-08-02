@@ -1,10 +1,11 @@
 module.exports = {
   header: {
     'home': 'HOME',
-    'fashion_show': 'FASHION SHOW',
+    'fashion_show': 'FASHION_SHOW',
     'photography': 'PHOTOGRAPHY',
     'talent': 'TALENT',
     'news': 'NEWS',
-    'contact': 'CONTACT'
+    'contact': 'CONTACT',
+    'video': 'VIDEO'
   }
 }
