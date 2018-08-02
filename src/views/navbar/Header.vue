@@ -10,7 +10,7 @@
       <div class="header-main">
         <ul class="header-list header-menu">
           <li @click="handleHeadChange('home')" :class="curPathName==='home'?'active':''">
-            <span>HOME</span>
+            <span>{{$t("header.home")}}</span>
           </li>
           <li :class="curPathName==='fashionShow'?'active':''"
               @mouseenter="onFashionShowMouseOver"
@@ -18,7 +18,7 @@
               @click="onFashionShowMouseOver"
               target-data="fashionShowTarget"
               id="fashionShowLi">
-            <span>FASHION SHOW</span>
+            <span>{{$t("header.fashion_show")}}</span>
           </li>
           <li :class="curPathName==='photography'?'active':''"
               @mouseenter="onPhotographyMouseOver"
@@ -26,7 +26,7 @@
               @click="onPhotographyMouseOver"
               target-data="photographyTarget"
               id="photographyLi">
-            <span>PHOTOGRAPHY</span>
+            <span>{{$t("header.photography")}}</span>
           </li>
           <li v-for="headItem in headItems"
               v-if="!headItem.authority || (headItem.authority && isLogin)"
@@ -66,8 +66,25 @@
             <i class="fa fa-sign-out"></i>
             logout
           </li>
+          <li>
+            <span class="demonstration"></span>
+            <el-dropdown>
+              <span class="header-list">
+                EN/CN<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item >
+                  <span @click="toEnglish()">English</span>
+                </el-dropdown-item>
+                <el-dropdown-item >
+                  <span @click="toChinese()">简体中文</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </li>
         </ul>
       </div>
+      
 
       <div class="brand-container">
         <img src="../../../static/img/logo2.jpg" class="brand">
@@ -213,6 +230,14 @@
       SearchPanel
     },
     methods: {
+      toEnglish () {
+        this.$i18n.locale = 'en_US'
+        console.log('What?')
+        console.log(this.$i18n.locale)
+      },
+      toChinese () {
+        this.$i18n.locale = 'zh_CN'
+      },
       ...mapMutations({
         logout: MutationTypes.LOGOUT
       }),
@@ -279,6 +304,7 @@
         }
       },
       handleHeadChange (headItemName) {
+        console.log(this.$i18n.locale)
         this.isShowingPhotography = false
         this.isShowingFashionShow = false
         if (headItemName === 'talent') {

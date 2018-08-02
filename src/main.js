@@ -7,7 +7,7 @@ import ElementUI from 'element-ui'
 import AwesomeSwiper from 'vue-awesome-swiper'
 
 import CommonUtils from './config/CommonUtils'
-
+import i18n from './tools/i18n'
 import 'element-ui/lib/theme-chalk/index.css'
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css')
 require('../node_modules/jquery/dist/jquery.min')
@@ -39,6 +39,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   template: '<App/>',
   components: { App }
 })
