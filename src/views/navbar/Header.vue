@@ -162,6 +162,8 @@
       </el-collapse>
     </div>
 
+    <hr class="band">
+
   </header>
 </template>
 
@@ -358,6 +360,12 @@
         top: -12px;
         width: 35px;
       }
+    }
+
+    .band {
+      margin-top: 0px;
+      color: black;
+      height: 70px;
     }
 
     /* first head */
