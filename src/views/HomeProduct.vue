@@ -42,7 +42,7 @@
         :width="item.width"
         :height="item.height"
         :order="item.index"
-        :key="item.index"
+        :key="index"
       >
         <div class="item">
           <!--<p>{{backendData[item.index]}}</p>-->
@@ -161,12 +161,17 @@
         }
 
         this.loading = false
-
+        if (curPageOffset === 1) {
+          this.items.data = []
+        }
         if (respBody.code === env.RESP_CODE.SUCCESS) {
-          this.backendData = this.backendData.concat(respBody.msg.list)
+          if (_selectedTags.length > 0) {
+            this.backendData = respBody.msg.list
+          } else {
+            this.backendData = this.backendData.concat(respBody.msg.list)
+          }
+          // this.backendData = respBody.msg.list
           this.pageInfo.total = respBody.msg.total
-
-//          this.items.data = []
 
           respBody.msg.list.forEach((data, index) => {
             const image = new Image()
@@ -180,6 +185,7 @@
             }
             image.src = data.img_url
           })
+          console.log(this.items)
         } else {
           toastr.error('加载数据失败！')
         }
@@ -301,9 +307,14 @@
         if (this.ownSelectedTags === null) {
           this.ownSelectedTags = this.getSelectedTags()
         } else {
+          var oldOne = this.ownSelectedTags
           this.ownSelectedTags = this.getSelectedTags()
-          this.pageInfo.curPage = 1
-          this.getCurPageItems()
+          if (this.ownSelectedTags.length > 0) {
+            this.pageInfo.curPage = 1
+          }
+          if (oldOne.length !== this.ownSelectedTags.length) {
+            this.getCurPageItems()
+          }
         }
         return this.ownSelectedTags
       }
