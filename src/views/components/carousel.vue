@@ -3,7 +3,7 @@
     <el-row>
       <div class="carousel">
         <div >
-          <el-carousel autoplay="false" type="card" height="700px" arrow="always">
+          <el-carousel type="card" height="700px" arrow="always">
             <el-carousel-item v-for="item in products">
                 <div class="cimg" style="height: 100%; width: 100%">
                   <img class="img"  :src="item.img_url" @click="onItemClick(item.id)">

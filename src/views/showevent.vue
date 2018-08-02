@@ -3,9 +3,31 @@
     <el-row>
       <carousel :products="products"></carousel>
     </el-row>
-    
+    <el-row><p></p></el-row>
+    <el-row><p></p></el-row>
+    <el-row><p></p></el-row>
     <el-row>
-
+        <div class="title">NEWEST SHOW/EVENT</div>
+      <div class="small">
+        
+        <div class="followers">
+        <div v-for="(item, index) in products" :key="index" class="follower">
+          <el-row>
+           <el-col :span="1"><p></p></el-col> 
+           <el-col :span="6"> 
+              <img :src="item.img_url" class="smallimg" :border="false" @click="onItemClick (item.id)"/>
+           </el-col>
+           <el-col :span="1"><p></p></el-col>   
+          </el-row>
+          <el-row><p></p></el-row>
+          <el-row><p></p></el-row>
+          <el-row><p class="dname">{{item.title}}</p></el-row>
+          <el-row><p></p></el-row>
+          <el-row><p></p></el-row>
+        </div>        
+        </div>            
+      </div>
+        <!-- <ItemCard v-for="item in products" :title="item.title" :cover="item.img_url" :desc="item.session"></ItemCard> -->
     </el-row>
   </div>
 </template>
@@ -15,16 +37,19 @@
   import ProductService from '@/service/ProductService'
   import env from '@/config/env'
   import carousel from '@/views/components/carousel'
+  import ItemCard from '@/views/components/ItemCard'
 
   export default {
     data: function () {
       return {
-        products: []
+        products: [],
+        t: 'aa'
       }
     },
     props: ['imgs'],
     components: {
-      carousel
+      carousel,
+      ItemCard
     },
     methods: {
       onItemClick (productId) {
@@ -84,6 +109,43 @@
       height: 700px;
       display: block;
       
+  }
+  .followers {
+    display: flex;
+    flex-wrap: wrap;
+    border: 0px solid #dcdfe6;
+    padding: 20px 15px 15px;
+    justify-content: space-around;
+    font-weight: 300;
+    letter-spacing: 1px;
+    width: 80%;background: #caab72;
+  }
+  .follower {
+    text-align: center;
+    font-size: 12px;
+    margin: 3px;
+  }   
+  .smallimg{
+      width: 300px;
+  } 
+  .small{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .title{
+    display: flex;
+    flex-wrap: wrap;
+    border: 0px solid #dcdfe6;
+    padding: 20px 15px 15px;
+    justify-content: space-around;
+    font-weight: 300;
+    letter-spacing: 1px;
+    width: 80%;background: #caab72;
+    margin:0 auto; 
+    font-weight: bolder;
+    font-size: 30pt;
   }
 </style>
 
