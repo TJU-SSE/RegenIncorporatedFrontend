@@ -2,12 +2,19 @@
     <div class="header">
       
       <div>
-        <p>Beauty Secrets</p>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row>
         <video-player 
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
         :playsinline="true"
         :options="playerOptions"></video-player>
+
+        </el-row>
       </div>
     </div>
 </template>
@@ -31,7 +38,7 @@ export default {
             withCredentials: false,
             type: 'video/mp4',
             src:
-              'http://ovwnlb7r9.bkt.clouddn.com/lpe7gTW1rqrtsJd0e-1fd2Zi2744'
+              'http://vjs.zencdn.net/v/oceans.mp4'
           }
         ],
         poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'

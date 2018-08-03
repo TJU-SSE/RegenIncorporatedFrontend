@@ -7,24 +7,21 @@
     <el-row><p></p></el-row>
     <el-row><p></p></el-row>
     <el-row>
-        <div class="title">NEWEST SHOW/EVENT</div>
-      <div class="small">
-        
+      <div class="title">NEWEST SHOW/EVENT</div>
+      <div class="small">  
         <div class="followers">
-        <div v-for="(item, index) in products" :key="index" class="follower">
           <el-row>
            <el-col :span="1"><p></p></el-col> 
            <el-col :span="6"> 
-              <img :src="item.img_url" class="smallimg" :border="false" @click="onItemClick (item.id)"/>
+              <item-card></item-card>
            </el-col>
            <el-col :span="1"><p></p></el-col>   
           </el-row>
           <el-row><p></p></el-row>
           <el-row><p></p></el-row>
-          <el-row><p class="dname">{{item.title}}</p></el-row>
+          <!-- <el-row><p class="dname">{{item.title}}</p></el-row> -->
           <el-row><p></p></el-row>
-          <el-row><p></p></el-row>
-        </div>        
+          <el-row><p></p></el-row>    
         </div>            
       </div>
         <!-- <ItemCard v-for="item in products" :title="item.title" :cover="item.img_url" :desc="item.session"></ItemCard> -->

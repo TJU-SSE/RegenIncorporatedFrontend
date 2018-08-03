@@ -24,7 +24,7 @@
   }
 
   .info {
-      padding-top: 15px;
+      padding-top: 10px;
   }
 
   .title {
