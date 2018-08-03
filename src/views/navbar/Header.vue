@@ -24,14 +24,14 @@
               :class="curPathName===headItem.name?'active':''">
             <span>{{headItem.title}}</span>
           </li>
-          <li :class="curPathName==='fashionShow'?'active':''"
+          <!-- <li :class="curPathName==='fashionShow'?'active':''"
               @mouseenter="onFashionShowMouseOver"
               @mouseleave="onFashionShowMouseOut"
               @click="onFashionShowMouseOver"
               target-data="fashionShowTarget"
               id="fashionShowLi">
             <span>{{$t("header.fashion_show")}}</span>
-          </li>
+          </li> -->
           <li class="add-btn" v-if="hasAddBtn" @click="onAddBtnClick">
             <a><i class="fa fa-plus fa-lg"></i></a>
           </li>
@@ -211,10 +211,10 @@
             name: 'contact',
             title: 'CONTACT'
           },
-          {
-            name: 'talent',
-            title: 'TALENT'
-          },
+          // {
+          //   name: 'talent',
+          //   title: 'TALENT'
+          // },
           {
             name: 'products',
             title: '作品库',
