@@ -147,5 +147,9 @@
     font-weight: bolder;
     font-size: 30pt;
   }
+  .dname{
+    font-size: 15px;
+    font-weight: bolder;
+  }  
 </style>
 
