@@ -1,11 +1,11 @@
 <template>
     <div class="card">
-        <div>
-            <!-- <div class="icon"></div> -->
-            <div class="imageDiv">
-                <img :src="cover" class="image">
-            </div>
+      <el-tooltip effect="dark" placement="left">
+        <div slot="content" class="item">{{intro}}</div>
+        <div :style="{backgroundImage: 'url(' + cover + ')', backgroundPosition: 'center center', backgroundSize: '100%', backgroundRepeat: 'no-repeat',height: '200px', display: 'flex', alignItems: 'center'}" @mouseover="showPlay" @mouseout="hidePlay">
+            <img v-if='showIcon' src="../../../static/img/play.png" class="play">
         </div>
+      </el-tooltip>
         <div class="info">
             <p class="title">{{title}}</p>
             <div class="bottom clearfix">
@@ -40,32 +40,20 @@
     line-height: 12px;
   }
 
-  .image {
-    width: 100%;
+  .item {
+    width: 100px;
   }
 
-  .icon {
-      width: 48px;
-      height: 48px;
-      background: url("../../../static/img/play.svg") center center;
-      background-size: 48px 48px;
-      opacity: 1;
-      margin: auto;
-      z-index: 100;
+  .play {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      margin-left: auto;
+      margin-right: auto;
   }
 
   div div :hover {
-      opacity: 1;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-      display: table;
-      content: "";
-  }
-  
-  .clearfix:after {
-      clear: both
+      opacity: 0.9;
   }
 </style>
 
@@ -73,9 +61,22 @@
 export default {
   data () {
     return {
-      currentDate: new Date()
+      currentDate: new Date(),
+      showIcon: false
     }
   },
-  props: ['cover', 'title', 'desc', 'isVideo']
+  props: ['cover', 'title', 'desc', 'isVideo', 'intro'],
+  mounted () {
+  },
+  methods: {
+    showPlay () {
+      if (this.isVideo) {
+        this.showIcon = true
+      }
+    },
+    hidePlay () {
+      this.showIcon = false
+    }
+  }
 }
 </script>
