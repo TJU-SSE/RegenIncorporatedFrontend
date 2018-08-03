@@ -12,6 +12,7 @@
             <time class="desc">{{desc}}</time>
             </div>
         </div>
+        <el-button v-if="isLogin" size="mini">修改</el-button>
     </div>
 </template>  
 
@@ -58,6 +59,8 @@
 </style>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -76,6 +79,14 @@ export default {
     },
     hidePlay () {
       this.showIcon = false
+    },
+    ...mapGetters({
+      checkLogin: 'checkLogin'
+    })
+  },
+  computed: {
+    isLogin () {
+      return this.checkLogin()
     }
   }
 }
