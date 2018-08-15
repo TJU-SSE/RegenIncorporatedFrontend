@@ -28,14 +28,10 @@ export default {
       playerOptions: {
         height: 500,
         width: 700,
-        overNative: true,
         autoplay: false,
         controls: true,
-        sourceOrder: true,
-        html5: { hls: { withCredentials: false } },
         sources: [
           {
-            withCredentials: false,
             type: 'video/mp4',
             src:
               'http://vjs.zencdn.net/v/oceans.mp4'

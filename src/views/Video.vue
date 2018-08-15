@@ -7,7 +7,18 @@
         <el-row><p></p></el-row>
         <el-row><p></p></el-row>
         <el-row>
-          <div class="title">NEWEST VIDEOS</div>
+          <div class="title">NEWEST VIDEOS
+            <el-button v-if="isLogin"
+             type="primary" 
+             class="create" 
+             size="small" 
+             @click="showDialog()"
+             plain 
+             round
+             >
+              <b>Create New Video</b>
+            </el-button>
+          </div>
           <div>  
             <div>
             <div v-for="(item, index) in videoItems" :key="index">
@@ -23,6 +34,35 @@
             </div>            
           </div>
         </el-row>
+        <el-dialog
+          title="创建新视频"
+          :visible.sync="dialogVisible"
+          width="60%"
+          height="40%">
+          <el-form >
+            <el-form-item label="Title" :label-width="formLabelWidth">
+              <el-input placeholder="请输入内容"></el-input>
+            </el-form-item>
+            <el-form-item label="Desc" :label-width="formLabelWidth">
+              <el-input placeholder="请输入内容"></el-input>
+            </el-form-item>
+            <el-form-item label="Intro" :label-width="formLabelWidth">
+              <el-input placeholder="请输入内容"></el-input>
+            </el-form-item>
+            <el-form-item label="封面链接" :label-width="formLabelWidth">
+              <el-input placeholder="请输入内容"></el-input>
+              <upload-image/>
+            </el-form-item>
+            <el-form-item label="视频链接" :label-width="formLabelWidth">
+              <el-input placeholder="请输入内容"></el-input>
+              <upload-video/>
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -33,10 +73,22 @@ import env from '@/config/env'
 import carousel from '@/views/components/carousel'
 import ItemCard from '@/views/components/ItemCard'
 import videoPlayer from './components/videoPlayer'
+import uploadImage from './admin/UploadImage.vue'
+import uploadVideo from './admin/UploadVideo.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
+      dialogVisible: false,
+      formLabelWidth: '80px',
+      videoInputData: {
+        cover: '1',
+        title: '测试',
+        desc: '测试视频',
+        isVideo: true,
+        intro: '这是一个用来测试的视频'
+      },
       videoItems: [{
         cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
         title: '测试',
@@ -112,13 +164,28 @@ export default {
       }]
     }
   },
+  methods: {
+    ...mapGetters({
+      checkLogin: 'checkLogin'
+    }),
+    showDialog () {
+      this.dialogVisible = true
+    }
+  },
   components: {
     videoPlayer,
     toastr,
     ProductService,
     env,
     carousel,
-    ItemCard
+    ItemCard,
+    uploadImage,
+    uploadVideo
+  },
+  computed: {
+    isLogin () {
+      return this.checkLogin()
+    }
   }
 }
 </script>
@@ -149,11 +216,17 @@ export default {
       display: block;
       
   }
+  .create{
+    display: flex;
+    font-size: 10pt;
+    font-weight: bolder;
+  }
  
   .small{
     display: flex;
     justify-content: center;
     align-items: center;
+    
   }
   .title{
     display: flex;

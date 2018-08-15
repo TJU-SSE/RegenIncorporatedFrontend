@@ -197,11 +197,11 @@
         headItems: [
           {
             name: 'show/event',
-            title: 'SHOW/EVENT'
+            title: this.$t('header.show_event')
           },
           {
             name: 'video',
-            title: 'VIDEO'
+            title: this.$t('header.video')
           },
           {
             name: 'news',
@@ -236,11 +236,12 @@
     methods: {
       toEnglish () {
         this.$i18n.locale = 'en_US'
-        console.log('What?')
-        console.log(this.$i18n.locale)
       },
       toChinese () {
         this.$i18n.locale = 'zh_CN'
+        console.log(this.$t('header.video'))
+        console.log('what the hell')
+        console.log(this.headItems)
       },
       ...mapMutations({
         logout: MutationTypes.LOGOUT
