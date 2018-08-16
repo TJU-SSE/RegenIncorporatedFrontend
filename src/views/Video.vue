@@ -8,16 +8,10 @@
         <el-row><p></p></el-row>
         <el-row>
           <div class="title">NEWEST VIDEOS
-            <el-button v-if="isLogin"
-             type="primary" 
-             class="create" 
-             size="small" 
-             @click="showDialog()"
-             plain 
-             round
-             >
-              <b>Create New Video</b>
-            </el-button>
+          <video-input
+        :visible.sync="dialogVisible"
+        :dialogVisible="dialogVisible">
+        </video-input>
           </div>
           <div>  
             <div>
@@ -34,27 +28,27 @@
             </div>            
           </div>
         </el-row>
-        <el-dialog
+        <!-- <el-dialog
           title="创建新视频"
           :visible.sync="dialogVisible"
           width="60%"
           height="40%">
-          <el-form >
+          <el-form :model="videoCreateData">
             <el-form-item label="Title" :label-width="formLabelWidth">
-              <el-input placeholder="请输入内容"></el-input>
+              <el-input v-model="videoCreateData.title" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="Desc" :label-width="formLabelWidth">
-              <el-input placeholder="请输入内容"></el-input>
+              <el-input v-model="videoCreateData.desc" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="Intro" :label-width="formLabelWidth">
-              <el-input placeholder="请输入内容"></el-input>
+              <el-input v-model="videoCreateData.intro" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item label="封面链接" :label-width="formLabelWidth">
-              <el-input placeholder="请输入内容"></el-input>
+              <el-input v-model="videoCreateData.cover" placeholder="请输入内容"></el-input>
               <upload-image/>
             </el-form-item>
             <el-form-item label="视频链接" :label-width="formLabelWidth">
-              <el-input placeholder="请输入内容"></el-input>
+              <el-input v-model="videoCreateData.video" placeholder="请输入内容"></el-input>
               <upload-video/>
             </el-form-item>
           </el-form>
@@ -62,7 +56,7 @@
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
           </span>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -75,19 +69,21 @@ import ItemCard from '@/views/components/ItemCard'
 import videoPlayer from './components/videoPlayer'
 import uploadImage from './admin/UploadImage.vue'
 import uploadVideo from './admin/UploadVideo.vue'
+import VideoInput from './admin/components/VideoInput.vue'
+import VideoService from '@/service/VideoService'
 import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
       dialogVisible: false,
-      formLabelWidth: '80px',
-      videoInputData: {
-        cover: '1',
+      videoCreateData: {
+        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
         title: '测试',
         desc: '测试视频',
         isVideo: true,
-        intro: '这是一个用来测试的视频'
+        intro: '这是一个用来测试的视频',
+        video: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
       },
       videoItems: [{
         cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
@@ -170,6 +166,18 @@ export default {
     }),
     showDialog () {
       this.dialogVisible = true
+    },
+    async onConfirmBtnClick (result) {
+      if (result) {
+        let respBody = await VideoService.create(this, this.editModalInfo.inputData)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          this.contactData = this.editModalInfo.inputData
+          toastr.success('创建视频成功！')
+        } else {
+          toastr.error('创建失败！')
+        }
+      }
+      this.editModalInfo.show = false
     }
   },
   components: {
@@ -180,7 +188,9 @@ export default {
     carousel,
     ItemCard,
     uploadImage,
-    uploadVideo
+    uploadVideo,
+    VideoService,
+    VideoInput
   },
   computed: {
     isLogin () {

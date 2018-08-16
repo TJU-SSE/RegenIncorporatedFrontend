@@ -11,9 +11,7 @@
         <video-player 
         class="video-player vjs-custom-skin"
         ref="videoPlayer"
-        :playsinline="true"
         :options="playerOptions"></video-player>
-
         </el-row>
       </div>
     </div>
@@ -27,14 +25,13 @@ export default {
     return {
       playerOptions: {
         height: 500,
-        width: 700,
-        autoplay: false,
-        controls: true,
+        autoplay: true,
+        controls: false,
         sources: [
           {
             type: 'video/mp4',
             src:
-              'http://vjs.zencdn.net/v/oceans.mp4'
+              'http://p3d12u2wq.bkt.clouddn.com/FggnKqrexFr4LGEjxb0e5LJi3Tik'
           }
         ],
         poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'

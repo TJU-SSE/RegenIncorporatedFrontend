@@ -67,5 +67,9 @@ export default {
   WORKER_UPDATE: '/admin/worker/update',
   WORKER_UPDATE_IMG: '/admin/worker/updateImg',
 
+  VIDEO_CREATE: '/admin/video/create',
+  VIDEO_UPDATE: '/admin/video/update',
+  VIDEO_DELETE: '/admin/video/delete',
+
   CONFIG_FOOTER_LINK: '/admin/config/footerLink'
 }
