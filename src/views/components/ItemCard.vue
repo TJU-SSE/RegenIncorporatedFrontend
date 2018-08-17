@@ -12,7 +12,6 @@
             <time class="desc">{{desc}}</time>
             </div>
         </div>
-        <el-button v-if="isLogin" size="mini">修改</el-button>
     </div>
 </template>  
 
@@ -60,6 +59,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import VideoService from '@/service/VideoService'
+import toastr from 'toastr'
+import env from '@/config/env'
+import VideoInput from '../admin/components/VideoInput.vue'
 
 export default {
   data () {
@@ -68,7 +71,7 @@ export default {
       showIcon: false
     }
   },
-  props: ['cover', 'title', 'desc', 'isVideo', 'intro'],
+  props: ['cover', 'id', 'title', 'desc', 'isVideo', 'intro'],
   mounted () {
   },
   methods: {
@@ -88,6 +91,12 @@ export default {
     isLogin () {
       return this.checkLogin()
     }
+  },
+  components: {
+    VideoService,
+    toastr,
+    env,
+    VideoInput
   }
 }
 </script>

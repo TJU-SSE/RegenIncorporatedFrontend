@@ -9,54 +9,37 @@
         <el-row>
           <div class="title">NEWEST VIDEOS
           <video-input
-        :visible.sync="dialogVisible"
-        :dialogVisible="dialogVisible">
+          dialogTitle="创建新视频">
         </video-input>
           </div>
           <div>  
             <div>
             <div v-for="(item, index) in videoItems" :key="index">
               <el-col :span="6"> 
-                  <item-card 
+                  <item-card
                   :title="item.title"
+                  :id="item.id"  
                   :intro="item.intro"
                   :desc="item.desc" 
                   :cover="item.cover" 
                   :isVideo="item.isVideo"></item-card>
+                  <video-input
+                  dialogTitle="修改视频信息"
+                  @refreshList="getVideos"
+                  :video="item.video"
+                  :rank="item.rank"
+                  :title="item.title"
+                  :id="item.id"  
+                  :intro="item.intro"
+                  :desc="item.desc" 
+                  :cover="item.cover" 
+                  :isVideo="item.isVideo">
+                  </video-input>
               </el-col>
             </div>        
             </div>            
           </div>
         </el-row>
-        <!-- <el-dialog
-          title="创建新视频"
-          :visible.sync="dialogVisible"
-          width="60%"
-          height="40%">
-          <el-form :model="videoCreateData">
-            <el-form-item label="Title" :label-width="formLabelWidth">
-              <el-input v-model="videoCreateData.title" placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="Desc" :label-width="formLabelWidth">
-              <el-input v-model="videoCreateData.desc" placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="Intro" :label-width="formLabelWidth">
-              <el-input v-model="videoCreateData.intro" placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="封面链接" :label-width="formLabelWidth">
-              <el-input v-model="videoCreateData.cover" placeholder="请输入内容"></el-input>
-              <upload-image/>
-            </el-form-item>
-            <el-form-item label="视频链接" :label-width="formLabelWidth">
-              <el-input v-model="videoCreateData.video" placeholder="请输入内容"></el-input>
-              <upload-video/>
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </span>
-        </el-dialog> -->
     </div>
 </template>
 
@@ -85,79 +68,7 @@ export default {
         intro: '这是一个用来测试的视频',
         video: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
       },
-      videoItems: [{
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }, {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
-        isVideo: true,
-        intro: '这是一个用来测试的视频'
-      }]
+      videoItems: []
     }
   },
   methods: {
@@ -178,6 +89,14 @@ export default {
         }
       }
       this.editModalInfo.show = false
+    },
+    async getVideos () {
+      let respBody = await VideoService.getAll(this)
+      if (respBody.code === env.RESP_CODE.SUCCESS) {
+        this.videoItems = respBody.msg.videos
+      } else {
+        toastr.error('接收信息失败！')
+      }
     }
   },
   components: {
@@ -196,6 +115,9 @@ export default {
     isLogin () {
       return this.checkLogin()
     }
+  },
+  mounted () {
+    this.getVideos()
   }
 }
 </script>
