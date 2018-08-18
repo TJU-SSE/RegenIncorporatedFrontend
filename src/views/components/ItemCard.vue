@@ -3,7 +3,7 @@
       <el-tooltip effect="dark" placement="left">
         <div slot="content" class="item">{{intro}}</div>
         <div :style="{backgroundImage: 'url(' + cover + ')', backgroundPosition: 'center center', backgroundSize: '100%', backgroundRepeat: 'no-repeat',height: '200px', display: 'flex', alignItems: 'center'}" @mouseover="showPlay" @mouseout="hidePlay">
-            <img v-if='showIcon' src="../../../static/img/play.png" class="play">
+            <img v-if='showIcon' @click="onItemClick()" src="../../../static/img/play.png" class="play">
         </div>
       </el-tooltip>
         <div class="info">
@@ -71,10 +71,34 @@ export default {
       showIcon: false
     }
   },
-  props: ['cover', 'id', 'title', 'desc', 'isVideo', 'intro'],
+  props: ['cover', 'id', 'video', 'title', 'desc', 'isVideo', 'intro'],
   mounted () {
   },
   methods: {
+    async getVideo () {
+      let respBody = await VideoService.getSingle(this, this.id)
+      if (respBody.code === env.RESP_CODE.SUCCESS) {
+        console.log('干你妈的bug')
+        localStorage.setItem('video', respBody.msg.video)
+        localStorage.setItem('cover', respBody.msg.cover)
+        var localVideo = localStorage.getItem('video')
+        if (this.isVideo === true) {
+          this.$router.push({
+            name: 'video',
+            params: {
+              videoId: this.id
+            }
+          })
+          location.reload()
+        }
+        console.log(localVideo)
+      } else {
+        toastr.error('接收信息失败！')
+      }
+    },
+    async onItemClick (itemIndex) {
+      this.getVideo()
+    },
     showPlay () {
       if (this.isVideo) {
         this.showIcon = true

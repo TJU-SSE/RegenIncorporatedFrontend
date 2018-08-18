@@ -1,7 +1,8 @@
 <template>
     <div>
         <el-row>
-          <video-player></video-player>
+          <video-player
+          :videoId="videoId"></video-player>
         </el-row>
         <el-row><p></p></el-row>
         <el-row><p></p></el-row>
@@ -19,6 +20,7 @@
                   <item-card
                   :title="item.title"
                   :id="item.id"  
+                  :video="item.video"
                   :intro="item.intro"
                   :desc="item.desc" 
                   :cover="item.cover" 
@@ -60,13 +62,14 @@ export default {
   data () {
     return {
       dialogVisible: false,
+      videoId: this.$route.params.videoId,
       videoCreateData: {
-        cover: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
-        title: '测试',
-        desc: '测试视频',
+        cover: '',
+        title: '',
+        desc: '',
         isVideo: true,
-        intro: '这是一个用来测试的视频',
-        video: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
+        intro: '',
+        video: ''
       },
       videoItems: []
     }

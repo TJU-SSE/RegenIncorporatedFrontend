@@ -75,7 +75,7 @@ const router = new Router({
       }
     },
     {
-      path: '/video',
+      path: '/video/:videoId',
       name: 'video',
       components: {
         headerBar: Header,
