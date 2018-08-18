@@ -25,6 +25,7 @@
     "simplemde-theme-base": "^0.2.1",
     "social-share.js": "^1.0.16",
     "toastr": "^2.1.2",
+    "videojs-contrib-hls": "^5.14.1",
     "vodal": "^2.1.0",
     "vue": "^2.5.16",
     "vue-awesome-swiper": "=2.4.2",

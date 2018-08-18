@@ -25,18 +25,21 @@ export default {
     return {
       playerOptions: {
         height: 500,
-        autoplay: true,
-        controls: false,
+        autoplay: false,
+        controls: true,
         sources: [
           {
             type: 'video/mp4',
-            src:
-              'http://p3d12u2wq.bkt.clouddn.com/FggnKqrexFr4LGEjxb0e5LJi3Tik'
+            src: localStorage.getItem('video')
           }
         ],
-        poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
+        poster: localStorage.getItem('cover')
       }
     }
+  },
+  props: ['videoId'],
+  methods: {
+
   },
   components: {
   }

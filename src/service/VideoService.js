@@ -14,6 +14,20 @@ export default {
       }
     }
   },
+  async getSingle (context, postData) {
+    try {
+      let response = await httpRequest(context, backendUrl.VIDEO_GET_SINGLE + '/' + postData, 'get')
+      if (response.body.code === env.RESP_CODE.SUCCESS) {
+        return response.body
+      }
+    } catch (exception) {
+      return {
+        code: env.RESP_CODE.FAIL,
+        err: exception
+      }
+    }
+  },
+
   async getAll (context) {
     try {
       let response = await httpRequest(context, backendUrl.VIDEO_GET_ALL, 'get')
