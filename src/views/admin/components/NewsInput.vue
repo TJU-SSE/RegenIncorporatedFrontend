@@ -12,9 +12,21 @@
     </div>
 
     <div class="form-inline form-group">
+      <i class="fa fa-text-height icon"></i>
+      <label class="form-label" for="title">中文标题</label>
+      <input type="text" class="form-control form-input" id="title" placeholder="title" v-model="newsData.title_cn">
+    </div>
+
+    <div class="form-inline form-group">
       <i class="fa fa-user icon"></i>
       <label class="form-label" for="writer">Writer</label>
       <input type="text" class="form-control form-input" id="writer" placeholder="writer" v-model="newsData.author">
+    </div>
+
+    <div class="form-inline form-group">
+      <i class="fa fa-user icon"></i>
+      <label class="form-label" for="writer">中文作者</label>
+      <input type="text" class="form-control form-input" id="writer" placeholder="writer" v-model="newsData.author_cn">
     </div>
 
     <div class="form-inline form-group">
@@ -65,7 +77,13 @@
         @ready="editorReady">
       </vue-u-editor>
     </div>
-        <upload-image></upload-image>
+    <div class="content" id="news-editor-cn">
+      <h3>中文内容</h3>
+      <vue-u-editor
+        @ready="editorReadyCn">
+      </vue-u-editor>
+    </div>
+    <upload-image></upload-image>
   </div>
 </template>
 
@@ -88,9 +106,12 @@
         default () {
           return {
             title: '',
+            title_cn: '',
             author: '',
+            author_cn: '',
             date: '',
             content: '',
+            content_cn: '',
             img: null,
             tag: null,
             editorInstance: null
@@ -136,6 +157,14 @@
           this.newsData.content = this.editorInstance.getContent()
         })
       },
+      editorReadyCn (editorInstanceCn) {
+        this.editorInstanceCn = editorInstanceCn
+        this.editorInstanceCn.setContent(this.newsData.content_cn)
+        this.editorInstanceCn.addListener('contentChange', () => {
+          console.log('编辑器内容变化', this.editorInstanceCn.getContent())
+          this.newsData.content_cn = this.editorInstanceCn.getContent()
+        })
+      },
       onNewsContentInput (value) {
         this.newsData.content = value
       },
@@ -154,20 +183,29 @@
             postData.append('tags', tag)
           }
           postData.append('writer', this.newsData.author)
+          postData.append('writer_cn', this.newsData.author_cn)
           postData.append('content', this.newsData.content)
+          postData.append('content_cn', this.newsData.content_cn)
           postData.append('title', this.newsData.title)
+          postData.append('title_cn', this.newsData.title_cn)
           postData.append('img', this.newsData.img)
           console.log('tag-----', this.newsData.tag)
+          console.log('postData', postData)
+          console.log('newsData', this.newsData)
           this.$emit('onSaveBtnClick', postData)
         } else {
           postData = {
             time: Date.parse(new Date(this.newsData.date)),
             writer: this.newsData.author,
+            writer_cn: this.newsData.author_cn,
             content: this.newsData.content,
+            content_cn: this.newsData.content_cn,
             title: this.newsData.title,
+            title_cn: this.newsData.title_cn,
             tags: this.newsData.tag
           }
           console.log('tag-----', this.newsData.tag)
+          console.log('postData', postData)
           this.$emit('onSaveBtnClick', {
             postData: postData,
             img: this.newsData.img
