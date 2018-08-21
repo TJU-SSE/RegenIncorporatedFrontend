@@ -45,6 +45,8 @@ export default {
   PRODUCT_ADD_IMGS: '/admin/product/addProductImgs',
   PRODUCT_DELETE_IMG: '/admin/product/deleteProductImg',
   PRODUCT_GET_BRIEF: '/admin/product/select/',
+  PRODUCT_GET_INSIDE_BANNER: '/admin/product/selectInsideBanner',
+  PRODUCT_GET_OUTSIDE_BANNER: '/admin/product/selectOutsideBanner',
 
   ARTIST_PRODUCT_GET_ALL: '/admin/artist/selectArticleProductById',
   ARTIST_PRODUCT_CREATE: '/admin/artist/createArtistProduct',

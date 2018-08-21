@@ -37,6 +37,7 @@
         </ul>
       </div>
     </div>
+
     <div class="right">
       <div class="edit-container" v-if="isLogin">
         <a @click="addImgVodalInfo.show = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
@@ -74,15 +75,49 @@
           </div>
         </vodal>
       </div>
+
       <div class="swiper">
         <Swiper :swiperSlides="seasons" :productId="productId" @selectPic="changePic"></Swiper>
       </div>
-      <transition name="slide-fade">
+
+    <waterfall
+      :line="items.line"
+      :line-gap="items.lineGap"
+      :min-line-gap="items.minLineGap"
+      :max-line-gap="items.maxLineGap"
+      :watch="items.data"
+      ref="waterfall"
+    >
+      <WaterfallSlot
+        v-for="(item,index) in items.data"
+        :width="item.width"
+        :height="item.height"
+        :order="item.index"
+        :key="index"
+      >
+        <div class="item">
+          <!--<p>{{backendData[item.index]}}</p>-->
+          <img class="" :src="item.imgUrl" :index="item.index" @click="onItemClick(item.index)">
+          <div class="item-info">
+            <h4>{{backendData[item.index].title}}</h4>
+          </div>
+        </div>
+        <div class="icon-group" v-if="isLogin">
+          <a class="minus-btn" @click="onDeleteBtnClick(item.index)"><i class="fa fa-trash fa-lg"></i></a>
+          <a class="edit-btn" @click="onUpdateBtnClick(item.index)"><i class="fa fa-edit fa-lg"></i></a>
+          <p class="icon-lg">
+            <i class="fa fa-line-chart"></i>
+            <span>rank: {{backendData[item.index].rank}}</span>
+          </p>
+        </div>
+      </WaterfallSlot>
+    </waterfall>
+      <!-- <transition name="slide-fade">
         <div class="lg-img" v-if="forChange">
           <img v-if="curImg" :src="curImg.url" :alt="curImg.name">
           <div class="img-desc common-markdown" v-html="imgDesc"></div>
         </div>
-      </transition>
+      </transition> -->
 
       <!-- <embed 
       src="http://my.tv.sohu.com/us/326455690/103228997.shtml"
@@ -117,7 +152,8 @@
   import Swiper from './components/Swiper.vue'
   import Vodal from 'vodal'
   import marked from 'marked'
-
+  import Waterfall from 'vue-waterfall/lib/waterfall'
+  import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import CommonUtils from '../config/CommonUtils'
 
   import ProductInput from '@/views/admin/components/ProductInput'
@@ -132,6 +168,13 @@
         productId: this.$route.params.showId,
         title: env.BRAND_NAME + ' | 案例',
         artistData: [],
+        items: {
+          minLineGap: 100,
+          maxLineGap: 400,
+          lineGap: 380,
+          line: 'h',
+          data: []
+        },        
         productData: {
           id: 16,
           img_url: '',
@@ -190,6 +233,8 @@
       Swiper,
       ProductInput,
       Vodal,
+      Waterfall,
+      WaterfallSlot,
       VueImgInputer
     },
     methods: {
@@ -204,6 +249,7 @@
       async getData () {
         let respBody = await ProductService.getDetail(this, this.productId)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
+          console.log(respBody)
           const artistIdMap = {}
           this.artistData = respBody.msg.artists.filter((artist) => {
             if (!artistIdMap[artist.id]) {
