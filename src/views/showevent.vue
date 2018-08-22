@@ -149,7 +149,7 @@
         if (result.result) {
           let respBody = await ProductService.create(this, result.data)
           if (respBody.code === env.RESP_CODE.SUCCESS) {
-            this.getItems()
+            window.location.reload()
             toastr.success('创建成功！')
           } else {
             toastr.error('创建失败！')
@@ -164,6 +164,7 @@
           })
           if (respBody.code === env.RESP_CODE.SUCCESS) {
             toastr.success('删除成功！')
+            window.location.reload()
           } else {
             toastr.error('删除失败！')
           }
@@ -177,7 +178,7 @@
           id: result, banner: true
         })
         if (respBody.code === env.RESP_CODE.SUCCESS) {
-          this.getBannerItems()
+          window.location.reload()
         } else {
           toastr.error('失败！')
         }
@@ -192,6 +193,7 @@
         })
         if (respBody.code === env.RESP_CODE.SUCCESS) {
           this.updateVodalInfo.show = false
+          window.location.reload()
         }
         this.updateVodalInfo.show = false
       },
