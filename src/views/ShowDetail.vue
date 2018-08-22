@@ -141,6 +141,12 @@
     <div class="hidden">{{productIdCom}}</div>
   </div> -->
   <div>
+        <ConfirmVodal :vodalText="confirmVodalText"
+                  :show="confirmVodalText.show"
+                  @hide="confirmVodalText.show = false"
+                  @onConfirmBtnClick="onConfirmDeleteBtnClick"
+                  :extraData="confirmVodalText.extraData">
+        </ConfirmVodal>
       <div class="edit-container" v-if="isLogin">
         <a @click="addImgVodalInfo.show = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
         <vodal :show="addImgVodalInfo.show"
@@ -199,7 +205,7 @@
           <img class="" :src="item.imgUrl" :index="item.index" @click="onItemClick(item.index)">
         </div>
         <div class="icon-group" v-if="isLogin">
-          <a class="minus-btn" @click="onDeleteBtnClick(item.index)"><i class="fa fa-trash fa-lg"></i></a>
+          <a class="minus-btn" @click="onDeleteImgClick(item.imgId)"><i class="fa fa-trash fa-lg"></i></a>
         </div>
       </WaterfallSlot>
     </waterfall>
@@ -241,7 +247,7 @@
   import Waterfall from 'vue-waterfall/lib/waterfall'
   import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import CommonUtils from '../config/CommonUtils'
-
+  import ConfirmVodal from '@/views/components/ConfirmVodal'
   import ProductInput from '@/views/admin/components/ProductInput'
   import VueImgInputer from 'vue-img-inputer'
 
@@ -261,7 +267,13 @@
           lineGap: 380,
           line: 'h',
           data: []
-        },        
+        },
+        confirmVodalText: {
+          title: '删除',
+          content: '是否删除这张图片？',
+          extraData: null,
+          show: false
+        },
         productData: {
           id: 16,
           img_url: '',
@@ -322,7 +334,8 @@
       Vodal,
       Waterfall,
       WaterfallSlot,
-      VueImgInputer
+      VueImgInputer,
+      ConfirmVodal
     },
     methods: {
       ...mapGetters({
@@ -349,7 +362,11 @@
           console.log('here')
           console.log(this.seasons)
           console.log(this.items)
-      },      
+      },   
+      onDeleteImgClick (imgId) {
+        this.confirmVodalText.extraData = imgId
+        this.confirmVodalText.show = true
+      },         
       async getData () {
         let respBody = await ProductService.getDetail(this, this.productId)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
@@ -385,12 +402,13 @@
                 index: index,
                 width: image.width / image.height * this.curHeight,
                 height: this.curHeight,
-                imgUrl: data.url
+                imgUrl: data.url,
+                imgId: data.id
               })
             }
             image.src = data.url
           })
-          // console.log(this.items)
+          console.log(this.items)
         }
       },
       async onConfirmBtnClick (result) {
@@ -428,6 +446,21 @@
         }
         this.editVodalInfo.show = false
       },
+      async onConfirmDeleteBtnClick (result) {
+        if (result) {
+          let respBody = await ProductService.deleteImg(this, {
+            id: this.productId,
+            img_id: result.extraData
+          })
+          if (respBody.code === env.RESP_CODE.SUCCESS) {
+            toastr.success('删除成功！')
+            window.location.reload()
+          } else {
+            toastr.error('删除失败')
+          }
+        }
+        this.confirmVodalText.show = false
+      },      
       onEditBtnClick () {
         this.editVodalInfo.refData = JSON.parse(JSON.stringify(this.productData))
         this.editVodalInfo.show = true
