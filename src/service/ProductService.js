@@ -233,5 +233,42 @@ export default {
         err: exception
       }
     }
+  },
+  async getInsideBannerItems (context) {
+    try {
+      let response = await httpRequest(context, backendUrl.PRODUCT_GET_INSIDE_BANNER, 'get')
+      if (response.body.code === env.RESP_CODE.SUCCESS) {
+      }
+      return response.body
+    } catch (exception) {
+      return {
+        code: env.RESP_CODE.FAIL,
+        err: exception
+      }
+    }
+  },
+  async getOutsideBannerItems (context) {
+    try {
+      let response = await httpRequest(context, backendUrl.PRODUCT_GET_OUTSIDE_BANNER, 'get')
+      if (response.body.code === env.RESP_CODE.SUCCESS) {
+      }
+      return response.body
+    } catch (exception) {
+      return {
+        code: env.RESP_CODE.FAIL,
+        err: exception
+      }
+    }
+  },
+  async updateShow (context, postData) {
+    try {
+      let response = await httpRequest(context, backendUrl.PRODUCT_UPGRADE, 'post', postData)
+      return response.body
+    } catch (exception) {
+      return {
+        code: env.RESP_CODE.FAIL,
+        err: exception
+      }
+    }
   }
 }

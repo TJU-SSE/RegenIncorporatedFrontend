@@ -1,5 +1,5 @@
 <template>
-  <div :class="['main-container', isSafari ? 'sa-main-container':'']" class="my-main-container show-detail-container">
+  <!-- <div :class="['main-container', isSafari ? 'sa-main-container':'']" class="my-main-container show-detail-container">
     <div v-if="isLogin">
       <a @click="onEditBtnClick"><i class="fa fa-edit fa-lg edit-btn"></i></a>
       <ProductInput :show="editVodalInfo.show"
@@ -13,8 +13,6 @@
         <h4>{{productData.title}}</h4>
         <h4>{{productData.session}}</h4>
         <div class="social-item">
-          <!-- <a><i class="fa fa-weibo fa-lg"></i></a>
-           <a><i class="fa fa-facebook fa-lg"></i></a>-->
         </div>
         <p v-if="productData.introduction">client: <a>{{productData.introduction.client}}</a></p>
         <p v-if="productData.introduction">source: <a>{{productData.introduction.source}}</a></p>
@@ -37,6 +35,7 @@
         </ul>
       </div>
     </div>
+
     <div class="right">
       <div class="edit-container" v-if="isLogin">
         <a @click="addImgVodalInfo.show = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
@@ -60,7 +59,7 @@
               <el-button size="small" type="primary">点击添加</el-button>
             </el-upload>
 
-            <!--<VueImgInputer @onChange="onAddImgChange"></VueImgInputer>-->
+          
             <footer class="confirm-btn-group">
               <el-button
                 type="primary"
@@ -74,9 +73,42 @@
           </div>
         </vodal>
       </div>
+
       <div class="swiper">
         <Swiper :swiperSlides="seasons" :productId="productId" @selectPic="changePic"></Swiper>
       </div>
+   
+    <waterfall
+      :line="items.line"
+      :line-gap="items.lineGap"
+      :min-line-gap="items.minLineGap"
+      :max-line-gap="items.maxLineGap"
+      :watch="items.data"
+      ref="waterfall"
+    >
+      <WaterfallSlot
+        v-for="(item,index) in items.data"
+        :width="item.width"
+        :height="item.height"
+        :order="item.index"
+        :key="index"
+      >
+        <img :src="item.imgUrl">
+        <h1>item.id</h1>
+        <div class="item">
+          
+          <img class="" :src="item.imgUrl" :index="item.index" @click="onItemClick(item.index)">
+        </div>
+        <div class="icon-group" v-if="isLogin">
+          <a class="minus-btn" @click="onDeleteBtnClick(item.index)"><i class="fa fa-trash fa-lg"></i></a>
+          <a class="edit-btn" @click="onUpdateBtnClick(item.index)"><i class="fa fa-edit fa-lg"></i></a>
+          <p class="icon-lg">
+            <i class="fa fa-line-chart"></i>
+            <span>rank: </span>
+          </p>
+        </div>
+      </WaterfallSlot>
+    </waterfall>
       <transition name="slide-fade">
         <div class="lg-img" v-if="forChange">
           <img v-if="curImg" :src="curImg.url" :alt="curImg.name">
@@ -84,7 +116,7 @@
         </div>
       </transition>
 
-      <!-- <embed 
+      <embed 
       src="http://my.tv.sohu.com/us/326455690/103228997.shtml"
       allowFullScreen='true' 
       quality='high' 
@@ -93,7 +125,7 @@
       align='middle' 
       allowScriptAccess='always' 
       type='application/x-shockwave-flash'>
-      </embed> -->
+      </embed>
 
 
       <iframe
@@ -107,6 +139,101 @@
       </iframe>
     </div>
     <div class="hidden">{{productIdCom}}</div>
+  </div> -->
+  <div>
+        <ConfirmVodal :vodalText="confirmVodalText"
+                  :show="confirmVodalText.show"
+                  @hide="confirmVodalText.show = false"
+                  @onConfirmBtnClick="onConfirmDeleteBtnClick"
+                  :extraData="confirmVodalText.extraData">
+        </ConfirmVodal>
+      <div class="edit-container" v-if="isLogin">
+        <a @click="addImgVodalInfo.show = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
+        <vodal :show="addImgVodalInfo.show"
+               @hide="addImgVodalInfo.show = false"
+               :width="addImgVodalInfo.width"
+               :height="addImgVodalInfo.height"
+               :measure="addImgVodalInfo.measure">
+          <div class="vodal-container">
+            <h3 class="vodal-title">添加图片</h3>
+
+            <el-upload
+              action=""
+              class="upload-demo"
+              :on-change="handleImgRemove"
+              :on-remove="handleImgRemove"
+              list-type="picture"
+              :auto-upload="false"
+              multiple
+            >
+              <el-button size="small" type="primary">点击添加</el-button>
+            </el-upload>
+
+          
+            <footer class="confirm-btn-group">
+              <el-button
+                type="primary"
+                :loading="addImgVodalInfo.loading"
+                @click="onAddImgConfirmBtnClick(true)"
+              >
+                确定
+              </el-button>
+              <button class="btn btn-danger" @click="onAddImgConfirmBtnClick(false)">取消</button>
+            </footer>
+          </div>
+        </vodal>
+      </div>
+    <div class="small">
+      <div class="wtf">
+        <waterfall
+      :line="items.line"
+      :line-gap="items.lineGap"
+      :min-line-gap="items.minLineGap"
+      :max-line-gap="items.maxLineGap"
+      :watch="items.data"
+      ref="waterfall"
+    >
+      <WaterfallSlot
+        v-for="(item,index) in items.data"
+        :width="item.width"
+        :height="item.height"
+        :order="item.index"
+        :key="index"
+      >
+        <div class="item">
+          
+          <img class="" :src="item.imgUrl" :index="item.index" @click="onItemClick(item.index)">
+        </div>
+        <div class="icon-group" v-if="isLogin">
+          <a class="minus-btn" @click="onDeleteImgClick(item.imgId)"><i class="fa fa-trash fa-lg"></i></a>
+        </div>
+      </WaterfallSlot>
+    </waterfall>
+      </div>
+    </div>
+    <div class="ach">
+      <p>ACHIEVEMENT</p>
+    </div>
+    <div v-if="isLogin">
+      <a @click="onEditBtnClick"><i class="fa fa-edit fa-lg edit-btn"></i></a>
+      <ProductInput :show="editVodalInfo.show"
+                    @hide="editVodalInfo.show = false"
+                    :title="editVodalInfo.title"
+                    @onConfirmBtnClick="onConfirmBtnClick"
+                    :productData="editVodalInfo.refData"></ProductInput>
+    </div>
+      <div class="info">
+        <h4>{{productData.title}}</h4>
+        <h4>{{productData.session}}</h4>
+        <div class="social-item">
+        </div>
+        <p v-if="productData.introduction">client: <a>{{productData.introduction.client}}</a></p>
+        <p v-if="productData.introduction">source: <a>{{productData.introduction.source}}</a></p>
+        <p>
+          published: {{getDateStrFromOBj(productData.releaseTime)}}
+        </p>
+        
+      </div>
   </div>
 </template>
 
@@ -117,9 +244,10 @@
   import Swiper from './components/Swiper.vue'
   import Vodal from 'vodal'
   import marked from 'marked'
-
+  import Waterfall from 'vue-waterfall/lib/waterfall'
+  import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import CommonUtils from '../config/CommonUtils'
-
+  import ConfirmVodal from '@/views/components/ConfirmVodal'
   import ProductInput from '@/views/admin/components/ProductInput'
   import VueImgInputer from 'vue-img-inputer'
 
@@ -132,6 +260,20 @@
         productId: this.$route.params.showId,
         title: env.BRAND_NAME + ' | 案例',
         artistData: [],
+        curHeight: 300,
+        items: {
+          minLineGap: 100,
+          maxLineGap: 400,
+          lineGap: 380,
+          line: 'h',
+          data: []
+        },
+        confirmVodalText: {
+          title: '删除',
+          content: '是否删除这张图片？',
+          extraData: null,
+          show: false
+        },
         productData: {
           id: 16,
           img_url: '',
@@ -190,7 +332,10 @@
       Swiper,
       ProductInput,
       Vodal,
-      VueImgInputer
+      Waterfall,
+      WaterfallSlot,
+      VueImgInputer,
+      ConfirmVodal
     },
     methods: {
       ...mapGetters({
@@ -201,9 +346,31 @@
         this.curImg = this.seasons[index]
         setTimeout(() => this.forChange = true, 500)
       },
+      dataclean () {
+          this.seasons.forEach((data, index) => {
+            const image = new Image()
+            image.onload = () => {
+              this.items.data.push({
+                index: this.pageInfo.pageSize * (curPageOffset - 1) + index,
+                width: image.width / image.height * this.curHeight,
+                height: this.curHeight,
+                imgUrl: data.img_url
+              })
+            }
+            image.src = data.img_url
+          })
+          console.log('here')
+          console.log(this.seasons)
+          console.log(this.items)
+      },   
+      onDeleteImgClick (imgId) {
+        this.confirmVodalText.extraData = imgId
+        this.confirmVodalText.show = true
+      },         
       async getData () {
         let respBody = await ProductService.getDetail(this, this.productId)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
+          console.log(respBody)
           const artistIdMap = {}
           this.artistData = respBody.msg.artists.filter((artist) => {
             if (!artistIdMap[artist.id]) {
@@ -224,6 +391,24 @@
               id: img.img_id
             }
           })
+          // console.log('here')
+          // console.log(this.seasons)
+          this.seasons.forEach((data, index) => {
+            // console.log('single')
+            // console.log(data)
+            const image = new Image()
+            image.onload = () => {
+              this.items.data.push({
+                index: index,
+                width: image.width / image.height * this.curHeight,
+                height: this.curHeight,
+                imgUrl: data.url,
+                imgId: data.id
+              })
+            }
+            image.src = data.url
+          })
+          console.log(this.items)
         }
       },
       async onConfirmBtnClick (result) {
@@ -261,6 +446,21 @@
         }
         this.editVodalInfo.show = false
       },
+      async onConfirmDeleteBtnClick (result) {
+        if (result) {
+          let respBody = await ProductService.deleteImg(this, {
+            id: this.productId,
+            img_id: result.extraData
+          })
+          if (respBody.code === env.RESP_CODE.SUCCESS) {
+            toastr.success('删除成功！')
+            window.location.reload()
+          } else {
+            toastr.error('删除失败')
+          }
+        }
+        this.confirmVodalText.show = false
+      },      
       onEditBtnClick () {
         this.editVodalInfo.refData = JSON.parse(JSON.stringify(this.productData))
         this.editVodalInfo.show = true
@@ -275,6 +475,9 @@
       async onAddImgConfirmBtnClick (result) {
         if (result && this.addImgVodalInfo.imgs) {
           this.addImgVodalInfo.loading = true
+          console.log('add img')
+          console.log(this.productId)
+          console.log(this.addImgVodalInfo.imgs.map(item => item.raw))
           const respBody = await ProductService.addImgs(this, {
             id: this.productId,
             imgs: this.addImgVodalInfo.imgs.map(item => item.raw)
@@ -317,6 +520,7 @@
     },
     mounted () {
       this.init()
+      // this.dataclean ()
     },
     computed: {
       isLogin () {
@@ -390,7 +594,7 @@
   .info {
     background: #f2f2f2;
     padding: 1.25rem;
-    width: 60%;
+    // width: 60%;
   }
 
   .info h3, h4 {
@@ -538,5 +742,101 @@
         width: 100%;
       }
     }
+  }
+  .item {
+    position: absolute;
+    width: 95%;
+    font-size: 1.2em;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+    }
+
+    .item-info {
+      display: none;
+      position: absolute;
+      /*bottom: 0;*/
+      left: 0;
+      right: 0;
+      padding: 3% 5%;
+      background: black;
+      color: white;
+      font-weight: normal;
+      opacity: .6;
+      animation: item-info-display .2s;
+    }
+  }
+  .item:hover .item-info {
+    display: block;
+    bottom: 0;
+  }
+  @keyframes item-info-display
+  {
+    from {
+      bottom: -50px;
+    }
+    to {
+      bottom: 0;
+    }
+  }
+
+  @keyframes myfirst2
+  {
+    from {
+      bottom: -50px;
+    }
+    to {
+      bottom: 0;
+    }
+  }
+
+  .admin-panel {
+    position: absolute;
+    top: -25px;
+    left: 44%;
+    z-index: 10;
+    width: 50%;
+
+    .add-btn, .edit-btn {
+      cursor: pointer;
+      margin: 0 3%;
+    }
+  }
+
+  .icon-group {
+    position: absolute;
+    right: 8%;
+    top: 5%;
+
+    .minus-btn, .edit-btn {
+      font-size: 1.5em;
+      margin: 5%;
+    }
+
+    .icon-lg {
+      padding: 5px;
+      border-radius: 5px;
+      background: #95A5A6;
+      font-weight: bold;
+    }
+  }
+  .wtf {  
+    margin:0 auto; 
+  }
+  .small {   
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    margin:0 auto; 
+  }
+  .ach {
+    height: 70px;
+    width: 500px;
+    background-color: #827430;
+    padding-left: 3em;
+  }
+  .ach > p {
+    font-size: 40pt
   }
 </style>
