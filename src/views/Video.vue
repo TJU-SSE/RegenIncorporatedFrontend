@@ -10,6 +10,7 @@
         <el-row>
           <div class="title">NEWEST VIDEOS
           <video-input
+          v-if="isLogin"
           dialogTitle="创建新视频">
         </video-input>
           </div>
