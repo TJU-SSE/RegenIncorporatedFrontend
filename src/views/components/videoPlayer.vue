@@ -26,7 +26,7 @@ export default {
       isShow: true,
       playerOptions: {
         height: 500,
-        autoplay: true,
+        autoplay: false,
         controls: true,
         sources: [
           {
@@ -41,7 +41,7 @@ export default {
   props: ['videoId'],
   methods: {
     onPlayerEnded (player) {
-      this.isShow = false
+      // this.isShow = false
       console.log('The end')
     }
   },
