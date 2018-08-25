@@ -78,13 +78,12 @@ export default {
     async getVideo () {
       let respBody = await VideoService.getSingle(this, this.id)
       if (respBody.code === env.RESP_CODE.SUCCESS) {
-        console.log('干你妈的bug')
         localStorage.setItem('video', respBody.msg.video)
         localStorage.setItem('cover', respBody.msg.cover)
         var localVideo = localStorage.getItem('video')
         if (this.isVideo === true) {
           this.$router.push({
-            name: 'video',
+            name: 'videoDetail',
             params: {
               videoId: this.id
             }

@@ -2,15 +2,19 @@
   <div>
     <el-button v-if="isUpdate" @click="showDialog()" size="mini">修改</el-button>
     <el-button
+      @click="onSetBanner()" 
+      v-if="isUpdate" 
+      size="mini" 
+      type="primary">设为封面</el-button>
+    <el-button
         @click="videoDelete()" 
         v-if="isUpdate" 
         size="mini" 
         type="danger">删除</el-button>
     <el-button v-if="isCreate"
-             type="primary" 
+             type="danger" 
              class="create"
              @click="showDialog()"
-             plain 
              round>
       <b>Create New Video</b>
     </el-button>
@@ -103,6 +107,16 @@ export default {
       this.videoCreateData.video = this.video
       this.videoCreateData.intro = this.intro
       this.videoCreateData.rank = this.rank
+    },
+    async onSetBanner () {
+      let respBody = await VideoService.update(this, {
+        id: this.id, banner: true
+      })
+      if (respBody.code === env.RESP_CODE.SUCCESS) {
+      } else {
+        toastr.error('失败！')
+      }
+      location.reload()
     },
     async onCreateVideoConfirmBtnClick () {
       if (this.dialogTitle === '创建新视频') {

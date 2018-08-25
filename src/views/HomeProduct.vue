@@ -1,4 +1,15 @@
 <template>
+<div>      
+  <!-- <div>
+    <el-row>
+        <video-player
+        :videoId="10">
+        </video-player>
+        </el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+    </div> -->
   <div class="main">
     <div v-if="isLogin">
       <div class="admin-panel">
@@ -28,7 +39,6 @@
                   :extraData="updateVodalInfo.extraData">
       </InputVodal>
     </div>
-
     <waterfall
       :line="items.line"
       :line-gap="items.lineGap"
@@ -73,6 +83,7 @@
     <div id="loading"></div>
     <div class="hidden">{{selectedTags}}</div>
   </div>
+</div>
 </template>
 
 <script>
@@ -81,7 +92,7 @@
   import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import toastr from 'toastr'
   import vodal from 'vodal'
-
+  import videoPlayer from './components/videoPlayer'
   import IndexService from '@/service/IndexProductService'
   import env from '@/config/env'
 
@@ -98,7 +109,8 @@
       NewsList,
       ConfirmVodal,
       InputVodal,
-      ProductListEdit
+      ProductListEdit,
+      videoPlayer
     },
     name: 'index',
     data () {
@@ -340,6 +352,12 @@
       this.getCurPageItems()
       this.setScrollListener()
       document.title = this.title
+      var test = localStorage.getItem('test')
+
+      if (!test) {
+        localStorage.setItem('test', true)
+        console.log('test')
+      }
     },
     beforeDestroy () {
       this.removeScrollListener()

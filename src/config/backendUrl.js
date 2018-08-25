@@ -74,6 +74,7 @@ export default {
   VIDEO_CREATE: '/admin/video/create',
   VIDEO_UPDATE: '/admin/video/update',
   VIDEO_DELETE: '/admin/video/delete',
+  VIDEO_GET_BANNER: '/admin/video/getVideoBanner',
 
   CONFIG_FOOTER_LINK: '/admin/config/footerLink'
 }

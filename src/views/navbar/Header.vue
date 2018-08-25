@@ -1,4 +1,5 @@
 <template>
+<div>
   <header class="header-wrap">
 
     <header class="header regen-container">
@@ -176,14 +177,15 @@
     </div>
 
     <hr class="band">
-
   </header>
+</div>
+
 </template>
 
 <script>
   import { mapGetters, mapMutations } from 'vuex'
   import * as MutationTypes from '../../store/mutationTypes'
-
+  import videoPlayer from '../components/videoPlayer'
   import CommonUtils from '../../config/CommonUtils'
   import TagsSelect from '../components/TagsSelect.vue'
   import SearchPanel from '../components/SearchPanel.vue'
@@ -200,7 +202,7 @@
             title: this.$t('header.show_event')
           },
           {
-            name: 'video',
+            name: 'videos',
             title: this.$t('header.video')
           },
           {
@@ -231,7 +233,8 @@
     },
     components: {
       TagsSelect,
-      SearchPanel
+      SearchPanel,
+      videoPlayer
     },
     methods: {
       toEnglish () {

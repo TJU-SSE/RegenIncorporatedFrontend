@@ -10,6 +10,7 @@
         <el-row>
           <div class="title">NEWEST VIDEOS
           <video-input
+          v-if="isLogin"
           dialogTitle="创建新视频">
         </video-input>
           </div>
@@ -95,8 +96,12 @@ export default {
     },
     async getVideos () {
       let respBody = await VideoService.getAll(this)
+      console.log('This is videoItems:')
+      console.log(respBody)
       if (respBody.code === env.RESP_CODE.SUCCESS) {
         this.videoItems = respBody.msg.videos
+        console.log('This is videoItems:')
+        console.log(respBody.msg.videos)
       } else {
         toastr.error('接收信息失败！')
       }

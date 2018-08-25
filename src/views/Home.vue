@@ -27,6 +27,16 @@
                   :extraData="updateVodalInfo.extraData">
       </InputVodal>
     </div>
+    <div>
+    <el-row>
+        <video-player
+        :videoId="10">
+        </video-player>
+        </el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+        <el-row><p></p></el-row>
+      </div>
 
 
     <waterfall
@@ -70,7 +80,7 @@
   import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import toastr from 'toastr'
   import vodal from 'vodal'
-
+  import videoPlayer from './components/videoPlayer'
   import IndexService from '@/service/IndexService'
   import env from '@/config/env'
 
@@ -85,7 +95,8 @@
       vodal,
       NewsList,
       ConfirmVodal,
-      InputVodal
+      InputVodal,
+      videoPlayer
     },
     name: 'index',
     data () {

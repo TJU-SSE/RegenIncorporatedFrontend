@@ -11,8 +11,6 @@
                <el-button type="danger" icon="el-icon-sort" circle @click="onDelBanner(item.id)"></el-button>
              </div>
              <div :style="{'height': '100%','width':'100%'}" @click="onItemClick(item.id)">
-
-                                
             <div class="slide-cover">
             <div class="text">
               <div>
@@ -36,6 +34,7 @@
   import { mapGetters } from 'vuex'
   import toastr from 'toastr'
   import ProductService from '@/service/ProductService'
+  import VideoService from '@/service/VideoService'
   import env from '@/config/env'
   export default {
     data: function () {
@@ -43,30 +42,59 @@
         // products: []
       }
     },
-    props: ['products'],
+    props: ['products', 'destination'],
     components: {
     },
     methods: {
       ...mapGetters({
         checkLogin: 'checkLogin'
       }),
-      onItemClick (productId) {
-        this.$router.push({
-          name: 'showDisplay',
-          params: {
-            showId: productId
-          }
-        })
+      async getVideo (productId) {
+        let respBody = await VideoService.getSingle(this, productId)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          localStorage.setItem('video', respBody.msg.video)
+          localStorage.setItem('cover', respBody.msg.cover)
+          this.$router.push({
+            name: 'videoDetail',
+            params: {
+              videoId: productId
+            }
+          })
+          location.reload()
+        } else {
+          toastr.error('接收信息失败！')
+        }
+      },
+      async onItemClick (productId) {
+        if (this.destination === 'videoDetail') {
+          this.getVideo(productId)
+        } else {
+          this.$router.push({
+            name: this.destination,
+            params: {
+              showId: productId
+            }
+          })
+        }
       },
       async onDelBanner (result) {
-        console.log('the id')
-        console.log(result)
-        let respBody = await ProductService.updateShow(this, {
-          id: result, banner: false
-        })
-        if (respBody.code === env.RESP_CODE.SUCCESS) {
+        if (this.destination === 'videoDetail') {
+          let respBody = await VideoService.update(this, {
+            id: result, banner: false
+          })
+          if (respBody.code === env.RESP_CODE.SUCCESS) {
+          } else {
+            toastr.error('失败！')
+          }
+          location.reload()
         } else {
-          toastr.error('失败！')
+          let respBody = await ProductService.updateShow(this, {
+            id: result, banner: false
+          })
+          if (respBody.code === env.RESP_CODE.SUCCESS) {
+          } else {
+            toastr.error('失败！')
+          }
         }
       }
     },

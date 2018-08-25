@@ -1,7 +1,10 @@
 <template>
   <div>
     <el-row>
-      <carousel :products="banners"></carousel>
+      <carousel 
+      :products="banners"
+      destination="showDisplay"
+      ></carousel>
     </el-row>
     <el-row><p></p></el-row>
     <el-row><p></p></el-row>
@@ -133,6 +136,8 @@
         let respBody = await ProductService.getOutsideBannerItems(this)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
           this.products = respBody.msg.products
+          console.log('products:')
+          console.log(this.products)
         } else {
           toastr.error('加载数据失败！')
         }
