@@ -31,6 +31,8 @@ export default {
   async getAll (context) {
     try {
       let response = await httpRequest(context, backendUrl.VIDEO_GET_ALL, 'get')
+      console.log('This is response:')
+      console.log(response)
       if (response.body.code === env.RESP_CODE.SUCCESS) {
         response.body.msg.videos = response.body.msg.videos.map((video1) => {
           return {
@@ -39,6 +41,34 @@ export default {
             video: video1.video,
             desc: video1.desc,
             title: video1.title,
+            intro: video1.intro,
+            rank: video1.rank,
+            isVideo: true
+          }
+        })
+      }
+      console.log(response.body.msg.videos)
+      return response.body
+    } catch (exception) {
+      return {
+        code: env.RESP_CODE.FAIL,
+        err: exception
+      }
+    }
+  },
+  async getVideoBanner (context) {
+    try {
+      let response = await httpRequest(context, backendUrl.VIDEO_GET_BANNER, 'get')
+      console.log('This is response:')
+      console.log(response)
+      if (response.body.code === env.RESP_CODE.SUCCESS) {
+        response.body.msg.videos = response.body.msg.videos.map((video1) => {
+          return {
+            img_url: video1.cover,
+            id: video1.id,
+            video: video1.video,
+            desc: video1.desc,
+            title1: video1.title,
             intro: video1.intro,
             rank: video1.rank,
             isVideo: true

@@ -9,7 +9,8 @@ import FashionShow from '@/views/FashionShow'
 // import Photography from '@/views/Photography'
 import Contact from '@/views/Contact'
 import News from '@/views/News'
-import Video from '@/views/Video'
+import VideoDetail from '@/views/VideoDetail'
+import Videos from '@/views/Videos'
 import Showevent from '@/views/showevent'
 import Photography from '@/views/Photography'
 import NewsDetail from '@/views/NewsDetail'
@@ -75,11 +76,20 @@ const router = new Router({
       }
     },
     {
-      path: '/video/:videoId',
-      name: 'video',
+      path: '/videoDetail/:videoId',
+      name: 'videoDetail',
       components: {
         headerBar: Header,
-        mainPage: Video,
+        mainPage: VideoDetail,
+        footerBar: Footer
+      }
+    },
+    {
+      path: '/videos',
+      name: 'videos',
+      components: {
+        headerBar: Header,
+        mainPage: Videos,
         footerBar: Footer
       }
     },
