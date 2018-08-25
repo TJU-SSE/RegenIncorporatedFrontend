@@ -7,8 +7,25 @@
                   :extraData="confirmVodalText.extraData">
         </ConfirmVodal>
       <div class="edit-container" v-if="isLogin">
-        <a @click="addImgVodalInfo.show = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
-        <vodal :show="addImgVodalInfo.show"
+        <a @click="addImgDialogVisible = true"><i class="fa fa-plus fa-lg add-btn"></i></a>
+            <el-dialog
+    title="添加"
+    :visible.sync="addImgDialogVisible"
+    width="60%"
+    height="40%">
+    <el-form :model="imgData">     
+      <el-form-item label="图片链接" :label-width="formLabelWidth">
+        <el-input v-model="imgData.img_url" placeholder="请输入内容"></el-input>
+        <upload-image/>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="addImgDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="onCreateConfirmBtnClick()">确 定</el-button>
+    </span>
+  </el-dialog>
+
+        <!-- <vodal :show="addImgVodalInfo.show"
                @hide="addImgVodalInfo.show = false"
                :width="addImgVodalInfo.width"
                :height="addImgVodalInfo.height"
@@ -27,7 +44,8 @@
             >
               <el-button size="small" type="primary">点击添加</el-button>
             </el-upload>
-
+            <el-input v-model="new_url" placeholder="请输入内容"></el-input>
+          <upload-image/>
           
             <footer class="confirm-btn-group">
               <el-button
@@ -40,7 +58,7 @@
               <button class="btn btn-danger" @click="onAddImgConfirmBtnClick(false)">取消</button>
             </footer>
           </div>
-        </vodal>
+        </vodal> -->
       </div>
     <div class="small">
       <div class="wtf">
@@ -74,20 +92,48 @@
       <p>ACHIEVEMENT</p>
     </div>
     <div v-if="isLogin">
-      <a @click="onEditBtnClick"><i class="fa fa-edit fa-lg edit-btn"></i></a>
-      <ProductInput :show="editVodalInfo.show"
+      <a @click="editDialogVisible = true"><i class="fa fa-edit fa-lg edit-btn"></i></a>
+          <el-dialog
+    title="编辑"
+    :visible.sync="editDialogVisible"
+    width="60%"
+    height="40%">
+    <el-form :model="productData">
+      <el-form-item label="Title" :label-width="formLabelWidth">
+        <el-input v-model="productData.title" placeholder="请输入内容"></el-input>
+      </el-form-item>
+      <el-form-item label="Title_cn" :label-width="formLabelWidth">
+        <el-input v-model="productData.title_cn" placeholder="请输入内容"></el-input>
+      </el-form-item>      
+      <el-form-item label="Intro" :label-width="formLabelWidth">
+        <el-input v-model="productData.introduction" placeholder="请输入内容"></el-input>
+      </el-form-item>
+      <el-form-item label="Intro_cn" :label-width="formLabelWidth">
+        <el-input v-model="productData.introduction_cn" placeholder="请输入内容"></el-input>
+      </el-form-item>      
+      <el-form-item label="封面链接" :label-width="formLabelWidth">
+        <el-input v-model="productData.cover_url" placeholder="请输入内容"></el-input>
+        <upload-image/>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="editDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="onEditConfirmBtnClick()">确 定</el-button>
+    </span>
+  </el-dialog>
+      <!-- <ProductInput :show="editVodalInfo.show"
                     @hide="editVodalInfo.show = false"
                     :title="editVodalInfo.title"
                     @onConfirmBtnClick="onConfirmBtnClick"
-                    :productData="editVodalInfo.refData"></ProductInput>
+                    :productData="editVodalInfo.refData"></ProductInput> -->
     </div>
       <div class="info">
         <h4>{{productData.title}}</h4>
-        <h4>{{productData.session}}</h4>
+        <!-- <h4>{{productData.session}}</h4> -->
         <div class="social-item">
         </div>
         <p>
-          published: {{getDateStrFromOBj(productData.releaseTime)}}
+          {{productData.introduction}}
         </p>
         
       </div>
@@ -107,17 +153,21 @@
   import ConfirmVodal from '@/views/components/ConfirmVodal'
   import ProductInput from '@/views/admin/components/ProductInput'
   import VueImgInputer from 'vue-img-inputer'
-
-  import ProductService from '@/service/ProductService'
+  import uploadImage from '@/views/admin/UploadImage.vue'
+  import PhotoService from '@/service/PhotoService'
   import env from '@/config/env'
 
   export default {
     data () {
       return {
-        productId: this.$route.params.showId,
+        productId: this.$route.params.photoId,
         title: env.BRAND_NAME + ' | 案例',
         artistData: [],
         curHeight: 300,
+        imgData: {id: 0, img_url: ''},
+        addImgDialogVisible: false,
+        formLabelWidth: '80px',
+        editDialogVisible: false,
         items: {
           minLineGap: 100,
           maxLineGap: 400,
@@ -133,23 +183,13 @@
         },
         productData: {
           id: 16,
-          img_url: '',
-          imgs: [],
-          rank: -1,
-          releaseTime: {
-            year: 1970,
-            month: 1,
-            day: 1
-          },
-          session: '',
           title: '',
-          introduction: {
-            desc: '',
-            source: '',
-            client: '',
-            weibo: '',
-            facebook: ''
-          },
+          title_cn: '',
+          introduction: '',
+          introduction_cn: '',
+          cover_url: '',
+          banner_rank: 0,
+          banner: false,
           tags: []
         },
         seasons: [],
@@ -192,7 +232,8 @@
       Waterfall,
       WaterfallSlot,
       VueImgInputer,
-      ConfirmVodal
+      ConfirmVodal,
+      uploadImage
     },
     methods: {
       ...mapGetters({
@@ -208,24 +249,11 @@
         this.confirmVodalText.show = true
       },         
       async getData () {
-        let respBody = await ProductService.getDetail(this, this.productId)
+        let respBody = await PhotoService.getItemById(this, this.productId)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
           console.log(respBody)
-          const artistIdMap = {}
-          this.artistData = respBody.msg.artists.filter((artist) => {
-            if (!artistIdMap[artist.id]) {
-              artistIdMap[artist.id] = true
-              return true
-            }
-            return false
-          })
-
-          respBody.msg.artists.forEach((artist) => {
-            artistIdMap[artist.id] = true
-          })
-
-          this.productData = respBody.msg.product
-          this.seasons = respBody.msg.product.imgs.map((img, index) => {
+          this.productData = respBody.msg
+          this.seasons = respBody.msg.imgs.map((img, index) => {
             return {
               url: img.img_url,
               id: img.img_id
@@ -287,8 +315,9 @@
         this.editVodalInfo.show = false
       },
       async onConfirmDeleteBtnClick (result) {
+        console.log(result)
         if (result) {
-          let respBody = await ProductService.deleteImg(this, {
+          let respBody = await PhotoService.deleteImg(this, {
             id: this.productId,
             img_id: result.extraData
           })
@@ -312,27 +341,28 @@
       handleImgRemove (file, fileList) {
         this.addImgVodalInfo.imgs = fileList
       },
-      async onAddImgConfirmBtnClick (result) {
-        if (result && this.addImgVodalInfo.imgs) {
-          this.addImgVodalInfo.loading = true
-          console.log('add img')
-          console.log(this.productId)
-          console.log(this.addImgVodalInfo.imgs.map(item => item.raw))
-          const respBody = await ProductService.addImgs(this, {
-            id: this.productId,
-            imgs: this.addImgVodalInfo.imgs.map(item => item.raw)
-          })
-          if (respBody.code === env.RESP_CODE.SUCCESS) {
-            this.init()
-            toastr.success('添加图片成功！')
-          } else {
-            toastr.error('添加图片失败！')
-          }
-        }
-        this.addImgVodalInfo.img = null
-        this.addImgVodalInfo.show = false
-        this.addImgVodalInfo.loading = false
+      async onCreateConfirmBtnClick () {
+        let respBody = await PhotoService.addphoto(this, this.imgData)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          toastr.error('创建成功')
+          this.dialogVisible = false
+          window.location.reload()
+        } else {
+          toastr.error('创建失败！')
+        }        
+        this.addImgDialogVisible = false
       },
+      async onEditConfirmBtnClick () {
+        let respBody = await PhotoService.update(this, this.productData)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          toastr.error('修改成功')
+          this.dialogVisible = false
+          window.location.reload()
+        } else {
+          toastr.error('修改失败！')
+        }        
+        this.addImgDialogVisible = false
+      },      
       onArtistClick (artistId) {
         this.$router.push({
           name: 'portfolio',
@@ -360,6 +390,7 @@
     },
     mounted () {
       this.init()
+      this.imgData.id = this.productId
       // this.dataclean ()
     },
     computed: {

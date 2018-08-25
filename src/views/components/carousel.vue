@@ -82,11 +82,11 @@
           let respBody = await VideoService.update(this, {
             id: result, banner: false
           })
+          window.location.reload()
           if (respBody.code === env.RESP_CODE.SUCCESS) {
           } else {
             toastr.error('失败！')
           }
-          location.reload()
         } else {
           let respBody = await ProductService.updateShow(this, {
             id: result, banner: false

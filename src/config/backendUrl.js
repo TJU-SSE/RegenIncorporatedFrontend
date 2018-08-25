@@ -76,5 +76,13 @@ export default {
   VIDEO_DELETE: '/admin/video/delete',
   VIDEO_GET_BANNER: '/admin/video/getVideoBanner',
 
+  PHOTO_CREATE: '/admin/photography/create',
+  PHOTO_DELETE: '/admin/photography/delete',
+  PHOTO_DELETE_IMG: '/admin/photography/deletePhotographyimg',
+  PHOTO_UPDATE: '/admin/photography/update',
+  PHOTO_GET_INSIDEBANNER: '/admin/photography/selectInsideBanner',
+  PHOTO_GET_OUTSIDEBANNER: '/admin/photography/selectOutsideBanner',
+  PHOTO_GET_BY_ID: '/admin/photography/select',
+  PHOTO_ADD_PHOTO: '/admin/photography/addPhotographyimg',
   CONFIG_FOOTER_LINK: '/admin/config/footerLink'
 }

@@ -1,19 +1,47 @@
 <template>
   <div>
     <el-row>
-      <carousel :products="banners"></carousel>
+      <photocarousel :products="banners"></photocarousel>
     </el-row>
     <el-row><p></p></el-row>
     <el-row><p></p></el-row>
     <el-row><p></p></el-row>
     <el-row>
       <div class="manage_icon" v-if="isLogin">
-        <el-button type="danger" icon="el-icon-circle-plus" circle @click="createProductInfo.show = true"></el-button>
+        <el-button type="danger" icon="el-icon-circle-plus" circle @click="dialogVisible = true"></el-button>
       </div>
-      <ProductInput :show="createProductInfo.show"
+    <el-dialog
+    title="创建"
+    :visible.sync="dialogVisible"
+    width="60%"
+    height="40%">
+    <el-form :model="CreateData">
+      <el-form-item label="Title" :label-width="formLabelWidth">
+        <el-input v-model="CreateData.title" placeholder="请输入内容"></el-input>
+      </el-form-item>
+      <el-form-item label="Title_cn" :label-width="formLabelWidth">
+        <el-input v-model="CreateData.title_cn" placeholder="请输入内容"></el-input>
+      </el-form-item>      
+      <el-form-item label="Intro" :label-width="formLabelWidth">
+        <el-input v-model="CreateData.introduction" placeholder="请输入内容"></el-input>
+      </el-form-item>
+      <el-form-item label="Intro_cn" :label-width="formLabelWidth">
+        <el-input v-model="CreateData.introduction_cn" placeholder="请输入内容"></el-input>
+      </el-form-item>      
+      <el-form-item label="封面链接" :label-width="formLabelWidth">
+        <el-input v-model="CreateData.cover_url" placeholder="请输入内容"></el-input>
+        <upload-image/>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="onCreateConfirmBtnClick()">确 定</el-button>
+    </span>
+  </el-dialog>
+      <!-- <ProductInput :show="createProductInfo.show"
                   @hide="createProductInfo.show = false"
                   :title="createProductInfo.title"
-                  @onConfirmBtnClick="onConfirmBtnClick"></ProductInput>
+                  @onConfirmBtnClick="onConfirmBtnClick"></ProductInput> -->
       <InputVodal :vodalText="updateVodalInfo"
                   :show="updateVodalInfo.show"
                   @hide="updateVodalInfo.show = false"
@@ -27,7 +55,7 @@
                       :extraData="confirmVodalText.extraData">
                       </ConfirmVodal>          
       <div class="title">     
-        NEWEST SHOW/EVENT
+        NEWEST PHOTOGRAPHY
       </div>
       <div class="small" >  
         <!-- <div class="followers">
@@ -51,12 +79,11 @@
            <el-col :span="6"> 
              <div class="manage_icon" v-if="isLogin">
                <!-- <el-button type="danger" icon="el-icon-edit" circle></el-button> -->
-               <el-button type="danger" icon="el-icon-delete" circle @click="onDeleteBtnClick(item.id)"></el-button>
-                       
+               <el-button type="danger" icon="el-icon-delete" circle @click="onDeleteBtnClick(item.id)"></el-button>                      
                <el-button type="danger" icon="el-icon-sort" circle @click="onAddBanner(item.id)"></el-button>
                <el-button type="danger" @click="onUpdateBtnClick(item.id, item.banner_rank)">rank: {{item.banner_rank}}</el-button>
              </div>           
-              <img :src="item.img_url" class="smallimg" :border="false" @click="onItemClick (item.id)"/>
+              <img :src="item.cover_url" class="smallimg" :border="false" @click="onItemClick (item.id)"/>
            </el-col>
            <el-col :span="1"><p></p></el-col>   
           </el-row>
@@ -76,19 +103,22 @@
 <script>
   import { mapGetters } from 'vuex'
   import toastr from 'toastr'
-  import ProductService from '@/service/ProductService'
+  import PhotoService from '@/service/PhotoService'
   import env from '@/config/env'
-  import carousel from '@/views/components/carousel'
+  import photocarousel from '@/views/components/photocarousel'
   import ItemCard from '@/views/components/ItemCard'
   import ProductInput from '@/views/admin/components/ProductInput'
   import ConfirmVodal from '@/views/components/ConfirmVodal'
   import InputVodal from '@/views/components/InputVodal'
+  import uploadImage from '@/views/admin/UploadImage.vue'
   export default {
     data: function () {
       return {
         products: [],
         banners: [],
         t: 'aa',
+        formLabelWidth: '80px',
+        dialogVisible: false,
         updateVodalInfo: {
           show: false,
           extraData: null,
@@ -103,6 +133,16 @@
           extraData: null,
           show: false
         },
+        CreateData: {
+          title: '',
+          title_cn: '',
+          introduction: '',
+          introduction_cn: '',
+          cover_url: '',
+          banner_rank: 0,
+          banner: false,
+          tags: []
+        },
         createProductInfo: {
           show: false,
           title: '创建Product'
@@ -111,11 +151,12 @@
     },
     props: ['imgs'],
     components: {
-      carousel,
+      photocarousel,
       ItemCard,
       ProductInput,
       ConfirmVodal,
-      InputVodal
+      InputVodal,
+      uploadImage
     },
     methods: {
       ...mapGetters({
@@ -130,36 +171,45 @@
         })
       },
       async getItems () {
-        let respBody = await ProductService.getOutsideBannerItems(this)
+        let respBody = await PhotoService.getOutsideBanner(this)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
-          this.products = respBody.msg.products
+          this.products = respBody.msg.photographies
         } else {
           toastr.error('加载数据失败！')
         }
       },
       async getBannerItems () {
-        let respBody = await ProductService.getInsideBannerItems(this)
+        let respBody = await PhotoService.getInsideBanner(this)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
-          this.banners = respBody.msg.products
+          this.banners = respBody.msg.photographies
+          console.log('banner')
+          console.log(this.banners)
         } else {
           toastr.error('加载数据失败！')
         }
       },
-      async onConfirmBtnClick (result) {
-        if (result.result) {
-          let respBody = await ProductService.create(this, result.data)
-          if (respBody.code === env.RESP_CODE.SUCCESS) {
-            window.location.reload()
-            toastr.success('创建成功！')
-          } else {
-            toastr.error('创建失败！')
-          }
-          this.createProductInfo.show = false
+      async onCreateConfirmBtnClick () {
+        let respBody = await PhotoService.create(this, this.CreateData)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          toastr.error('创建成功')
+          this.dialogVisible = false
+        } else {
+          toastr.error('创建失败！')
         }
+        // if (result.result) {
+        //   let respBody = await PhotoService.create(this, result.data)
+        //   if (respBody.code === env.RESP_CODE.SUCCESS) {
+        //     window.location.reload()
+        //     toastr.success('创建成功！')
+        //   } else {
+        //     toastr.error('创建失败！')
+        //   }
+        //   this.createProductInfo.show = false
+        // }
       },
       async onConfirmDeleteBtnClick (result) {
         if (result.result) {
-          let respBody = await ProductService.delete(this, {
+          let respBody = await PhotoService.delete(this, {
             id: result.extraData
           })
           if (respBody.code === env.RESP_CODE.SUCCESS) {
@@ -174,7 +224,7 @@
       async onAddBanner (result) {
         console.log('the id')
         console.log(result)
-        let respBody = await ProductService.updateShow(this, {
+        let respBody = await PhotoService.update(this, {
           id: result, banner: true
         })
         if (respBody.code === env.RESP_CODE.SUCCESS) {
@@ -188,7 +238,7 @@
         console.log(result)
         let index = result.extraData
         let rank = parseFloat(result.inputText)
-        let respBody = await ProductService.updateShow(this, {
+        let respBody = await PhotoService.update(this, {
           id: index, banner_rank: rank
         })
         if (respBody.code === env.RESP_CODE.SUCCESS) {
@@ -210,6 +260,8 @@
     mounted () {
       this.getItems()
       this.getBannerItems()
+      console.log('products')
+      console.log(this.products)
     },
     computed: {
       isLogin () {

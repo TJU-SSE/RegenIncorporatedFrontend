@@ -5,7 +5,7 @@
         <div >
           <el-carousel height="700px" arrow="always">
             <el-carousel-item v-for="item in products"
-             :style="{'background-image': 'url('+ item.imgUrl +')','cursor': 'pointer', 'background-size': 'auto 100%','background-repeat':'no-repeat','background-position':'center'}">
+             :style="{'background-image': 'url('+ item.cover_url +')','cursor': 'pointer', 'background-size': 'auto 100%','background-repeat':'no-repeat','background-position':'center'}">
               <div class="manage_icon" v-if="isLogin">
                <!-- <el-button type="danger" icon="el-icon-delete" circle></el-button> -->
                <el-button type="danger" icon="el-icon-sort" circle @click="onDelBanner(item.id)"></el-button>
@@ -46,7 +46,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import toastr from 'toastr'
-  import ProductService from '@/service/ProductService'
+  import PhotoService from '@/service/PhotoService'
   import env from '@/config/env'
   export default {
     data: function () {
@@ -63,16 +63,16 @@
       }),
       onItemClick (productId) {
         this.$router.push({
-          name: 'portfolio',
+          name: 'photo',
           params: {
-            designerId: productId
+            photoId: productId
           }
         })
       },
       async onDelBanner (result) {
         console.log('the id')
         console.log(result)
-        let respBody = await ProductService.updateShow(this, {
+        let respBody = await PhotoService.update(this, {
           id: result, banner: false
         })
         if (respBody.code === env.RESP_CODE.SUCCESS) {
