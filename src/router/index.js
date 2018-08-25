@@ -15,6 +15,7 @@ import Photography from '@/views/Photography'
 import NewsDetail from '@/views/NewsDetail'
 import Portfolio from '@/views/Portfolio'
 import ShowDisplay from '@/views/ShowDetail'
+import PhotoDetail from '@/views/PhotoDetail'
 import Login from '@/views/Login'
 
 import CreateNews from '@/views/admin/CreateNews'
@@ -116,6 +117,15 @@ const router = new Router({
       components: {
         headerBar: Header,
         mainPage: Portfolio,
+        footerBar: Footer
+      }
+    },
+    {
+      path: '/photo/:photoId',
+      name: 'photo',
+      components: {
+        headerBar: Header,
+        mainPage: PhotoDetail,
         footerBar: Footer
       }
     },
