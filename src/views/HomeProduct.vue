@@ -1,15 +1,28 @@
 <template>
 <div>      
-  <!-- <div>
-    <el-row>
+  <div>
+    <!-- <video-input
+    dialogTitle="修改视频信息"
+    @refreshList="getVideo"
+    :video="homeVideo.video"
+    :rank="homeVideo.rank"
+    :title="homeVideo.title"
+    :id="homeVideo.id"  
+    :intro="homeVideo.intro"
+    :desc="homeVideo.desc" 
+    :cover="homeVideo.cover" 
+    :isVideo="homeVideo.isVideo">
+    </video-input> -->
+    <el-row v-if="isShowVideo()">
         <video-player
-        :videoId="10">
+        ref="videoPlayer"
+        :videoId="1">
         </video-player>
         </el-row>
         <el-row><p></p></el-row>
         <el-row><p></p></el-row>
         <el-row><p></p></el-row>
-    </div> -->
+    </div>
   <div class="main">
     <div v-if="isLogin">
       <div class="admin-panel">
@@ -88,14 +101,15 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import VideoInput from './admin/components/VideoInput.vue'
   import Waterfall from 'vue-waterfall/lib/waterfall'
   import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot'
   import toastr from 'toastr'
   import vodal from 'vodal'
-  import videoPlayer from './components/videoPlayer'
+  import videoPlayer from './components/homePlayer'
   import IndexService from '@/service/IndexProductService'
   import env from '@/config/env'
-
+  import VideoService from '@/service/VideoService'
   import NewsList from './admin/components/NewsList.vue'
   import ConfirmVodal from '@/views/components/ConfirmVodal'
   import InputVodal from '@/views/components/InputVodal'
@@ -110,12 +124,15 @@
       ConfirmVodal,
       InputVodal,
       ProductListEdit,
-      videoPlayer
+      videoPlayer,
+      VideoService,
+      VideoInput
     },
     name: 'index',
     data () {
       return {
         title: env.BRAND_NAME + ' | Home',
+        homeVideo: {},
         items: {
           minLineGap: 100,
           maxLineGap: 400,
@@ -161,6 +178,26 @@
         checkLogin: 'checkLogin',
         getSelectedTags: 'getSelectedTags'
       }),
+      isShowVideo () {
+        return localStorage.getItem('showVideo') === null
+      },
+      async getVideo () {
+        let respBody = await VideoService.getSingle(this, 1)
+        if (respBody.code === env.RESP_CODE.SUCCESS) {
+          this.homeVideo = respBody.msg
+          localStorage.setItem('video', respBody.msg.video)
+          localStorage.setItem('cover', respBody.msg.cover)
+          if (localStorage.getItem('isFirstTime') === null) {
+            localStorage.setItem('isFirstTime', false)
+            location.reload()
+          }
+          if (localStorage.getItem('showVideo') === null) {
+            this.$refs.videoPlayer.playTest()
+          }
+        } else {
+          toastr.error('接收信息失败！')
+        }
+      },
       async getItems (curPageOffset) {
         this.loading = true
 
@@ -197,7 +234,6 @@
             }
             image.src = data.img_url
           })
-          console.log(this.items)
         } else {
           toastr.error('加载数据失败！')
         }
@@ -333,7 +369,6 @@
     },
     watch: {
       loading () {
-        console.log('loading change', this.loading)
         if (this.loading) {
           this.loadingService = this.$loading({
             lock: true,
@@ -349,15 +384,10 @@
       }
     },
     mounted () {
+      this.getVideo()
       this.getCurPageItems()
       this.setScrollListener()
       document.title = this.title
-      var test = localStorage.getItem('test')
-
-      if (!test) {
-        localStorage.setItem('test', true)
-        console.log('test')
-      }
     },
     beforeDestroy () {
       this.removeScrollListener()
@@ -368,6 +398,7 @@
 <style scoped lang="scss">
   @import "../../static/css/common";
   @import "../../node_modules/vodal/common.css";
+  
   @import "../../node_modules/vodal/rotate.css";
   .main {
     margin: 15px 3%;

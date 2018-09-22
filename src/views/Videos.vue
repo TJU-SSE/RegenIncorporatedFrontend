@@ -94,6 +94,7 @@ export default {
         console.log('This is Banner')
         console.log(respBody.msg.videos)
       } else {
+        console.log('This is get Video')
         toastr.error('加载数据失败！')
       }
     },
