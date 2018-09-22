@@ -30,7 +30,7 @@
     <div>
     <el-row>
         <video-player
-        :videoId="10">
+        :videoId="1">
         </video-player>
         </el-row>
         <el-row><p></p></el-row>

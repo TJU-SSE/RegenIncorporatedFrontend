@@ -1,7 +1,7 @@
 <template>
 <div>      
   <div>
-    <!-- <video-input
+    <video-input
     dialogTitle="修改视频信息"
     @refreshList="getVideo"
     :video="homeVideo.video"
@@ -12,7 +12,7 @@
     :desc="homeVideo.desc" 
     :cover="homeVideo.cover" 
     :isVideo="homeVideo.isVideo">
-    </video-input> -->
+    </video-input>
     <el-row v-if="isShowVideo()">
         <video-player
         ref="videoPlayer"
@@ -132,7 +132,7 @@
     data () {
       return {
         title: env.BRAND_NAME + ' | Home',
-        homeVideo: {},
+        homeVideo: localStorage.getItem('homeVideo'),
         items: {
           minLineGap: 100,
           maxLineGap: 400,
@@ -185,6 +185,7 @@
         let respBody = await VideoService.getSingle(this, 1)
         if (respBody.code === env.RESP_CODE.SUCCESS) {
           this.homeVideo = respBody.msg
+          localStorage.setItem('homeVideo', respBody.msg)
           localStorage.setItem('video', respBody.msg.video)
           localStorage.setItem('cover', respBody.msg.cover)
           if (localStorage.getItem('isFirstTime') === null) {

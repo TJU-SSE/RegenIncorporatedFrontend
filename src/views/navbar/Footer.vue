@@ -37,7 +37,10 @@
         </span>
         </el-dialog>
       </div>
-  </div>
+    </div>
+    <div class="footer-row3 bold-font">
+      <a href="http://www.miitbeian.gov.cn/" target="_blank">沪ICP备17041605号</a>
+    </div>
   </div>
 </template>
 
@@ -119,6 +122,13 @@
       align-items: center;
       margin-top: 30px;
     }
+    .footer-row3 {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+    }
   }
   .footer .footer-row {
     display: flex;
@@ -132,7 +142,8 @@
   }
 
   .footer-address {
-    font-size: 16px;
+    font-size: 14px;
+    font-family: Seravek;
   }
   .edit-container {
     margin-left: 12px;
